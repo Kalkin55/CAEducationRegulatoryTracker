@@ -9,7 +9,7 @@ from bs4 import Tag
 
 MONTHS = ("january|february|march|april|may|june|july|august|september|october|november|december"
           "|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec")
-LONG_DATE = re.compile(rf"\b({MONTHS})\.?\s+(\d{{1,2}})(?:\s*[-–]\s*\d{{1,2}})?(?:,?\s+(\d{{4}}))?",
+LONG_DATE = re.compile(rf"\b({MONTHS})\.?\s+(\d{{1,2}})(?!\d)(?:\s*[-–]\s*\d{{1,2}})?(?:,?\s+(\d{{4}}))?",
                        re.IGNORECASE)
 
 

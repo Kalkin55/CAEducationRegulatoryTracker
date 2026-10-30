@@ -137,12 +137,12 @@ def is_active(p: Posting, today: dt.date) -> bool:
     return p.meeting_date is None or p.meeting_date >= today - dt.timedelta(days=ACTIVE_WINDOW_DAYS)
 
 
-def content_hash(p: Posting, doc_shas: dict[str, str | None]) -> str:
+def content_hash(p: Posting) -> str:
     payload = {
         "title": p.title,
         "date": p.meeting_date.isoformat() if p.meeting_date else None,
         "items": [[i.number, i.title, i.description] for i in p.items],
-        "docs": sorted([d.url, doc_shas.get(d.url) or "unfetched"] for d in p.documents),
+        "docs": sorted({d.url for d in p.documents}),
     }
     return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
 
@@ -158,48 +158,63 @@ def store_posting(conn: psycopg.Connection, fetcher: Fetcher, agency_id: str, p:
 
     stored: dict[str, tuple[str | None, str | None]] = {}
     recent: set[str] = set()  # checked within DOC_RECHECK_HOURS
+    too_large: set[str] = set()
     if posting_id is not None:
-        for url, sha, text, fresh in conn.execute(
+        for url, sha, text, fresh, error in conn.execute(
                 """select url, sha256, text,
-                          fetched_at > now() - make_interval(hours => %s)
+                          fetched_at > now() - make_interval(hours => %s), fetch_error
                    from documents where posting_id = %s""",
                 (DOC_RECHECK_HOURS, posting_id)):
             stored[url] = (sha, text)
             if fresh and sha is not None:
                 recent.add(url)
+            if error and "larger than" in error:
+                too_large.add(url)  # don't download a huge file again every run
 
     p.documents = p.documents[:MAX_DOCS_PER_POSTING]
     refresh = posting_id is None or is_active(p, today)
     docs: dict[str, FetchedDocument] = {}
+    fetched: set[str] = set()  # attempted this run
+    revised = False      # a document we already had has new contents
+    first_text = False   # a document's contents arrived for the first time
     for d in p.documents:
         if d.url in docs:
             continue
         prev_sha, prev_text = stored.get(d.url, (None, None))
-        if prev_sha is None or (refresh and d.url not in recent):
+        if d.url in too_large:
+            docs[d.url] = FetchedDocument(None, None, "file too large to download for searching")
+        elif prev_sha is None or (refresh and d.url not in recent):
             got = fetch_document(fetcher, d.url)
+            fetched.add(d.url)
             if got.sha256 is None and prev_sha is not None:
                 got = FetchedDocument(prev_sha, prev_text, got.error)  # keep last good copy
             elif got.sha256 == prev_sha and got.text is None:
                 got = FetchedDocument(prev_sha, prev_text, got.error)
+            revised |= prev_sha is not None and got.sha256 != prev_sha
+            first_text |= prev_sha is None and got.sha256 is not None
             docs[d.url] = got
         else:
             docs[d.url] = FetchedDocument(prev_sha, prev_text)
 
-    new_hash = content_hash(p, {u: f.sha256 for u, f in docs.items()})
+    # The hash covers what the agenda lists (including which documents it links),
+    # not document contents, so a document that downloads in a later run (or is
+    # deferred by a per-site request limit) isn't mistaken for a change.
+    new_hash = content_hash(p)
+    changed = posting_id is None or new_hash != old_hash or revised
 
-    if posting_id is not None and new_hash == old_hash:
+    if not changed and not first_text:
         conn.execute(
             "update postings set last_seen_at = now(), url = %s where id = %s",
             (p.url, posting_id),
         )
-        if refresh:
-            for url, got in docs.items():
-                conn.execute(
-                    """update documents set fetch_error = %s,
-                         fetched_at = case when %s::text is null then now() else fetched_at end
-                       where posting_id = %s and url = %s""",
-                    (got.error, got.error, posting_id, url),
-                )
+        for url in fetched:
+            got = docs[url]
+            conn.execute(
+                """update documents set fetch_error = %s,
+                     fetched_at = case when %s::text is null then now() else fetched_at end
+                   where posting_id = %s and url = %s""",
+                (got.error, got.error, posting_id, url),
+            )
         return "unchanged", posting_id
 
     if posting_id is None:
@@ -211,44 +226,70 @@ def store_posting(conn: psycopg.Connection, fetcher: Fetcher, agency_id: str, p:
              new_hash, baseline),
         ).fetchone()
         outcome = "new"
-    else:
+    elif changed:
         conn.execute(
             """update postings set kind = %s, title = %s, meeting_date = %s, url = %s,
                  content_hash = %s, last_changed_at = clock_timestamp(), last_seen_at = now()
                where id = %s""",
             (p.kind, p.title, p.meeting_date, p.url, new_hash, posting_id),
         )
-        conn.execute("delete from items where posting_id = %s", (posting_id,))
         outcome = "updated"
+    else:
+        outcome = "unchanged"  # only newly downloaded text; decided after matching below
 
-    for pos, item in enumerate(p.items):
+    if changed:
+        conn.execute("delete from items where posting_id = %s", (posting_id,))
+        for pos, item in enumerate(p.items):
+            conn.execute(
+                """insert into items (posting_id, position, number, title, description)
+                   values (%s, %s, %s, %s, %s)""",
+                (posting_id, pos, item.number, item.title, item.description),
+            )
         conn.execute(
-            """insert into items (posting_id, position, number, title, description)
-               values (%s, %s, %s, %s, %s)""",
-            (posting_id, pos, item.number, item.title, item.description),
+            "delete from documents where posting_id = %s and not (url = any(%s))",
+            (posting_id, list(docs)),
         )
 
-    conn.execute(
-        "delete from documents where posting_id = %s and not (url = any(%s))",
-        (posting_id, list(docs)),
-    )
     labels = {d.url: d for d in reversed(p.documents)}  # first occurrence wins
     for url, got in docs.items():
+        if not changed and url not in fetched:
+            continue
         link = labels[url]
         conn.execute(
             """insert into documents (posting_id, item_position, url, label, sha256, text,
                  fetched_at, fetch_error)
-               values (%s, %s, %s, %s, %s, %s, now(), %s)
+               values (%s, %s, %s, %s, %s, %s, case when %s then now() end, %s)
                on conflict (posting_id, url) do update set item_position = excluded.item_position,
                  label = excluded.label, sha256 = excluded.sha256, text = excluded.text,
-                 fetched_at = excluded.fetched_at, fetch_error = excluded.fetch_error""",
-            (posting_id, link.item_index, url, link.label, got.sha256, got.text, got.error),
+                 fetched_at = coalesce(excluded.fetched_at, documents.fetched_at),
+                 fetch_error = excluded.fetch_error""",
+            (posting_id, link.item_index, url, link.label, got.sha256, got.text,
+             url in fetched, got.error),
         )
 
-    if not baseline:
+    before = _match_keys(conn, posting_id)
+    conn.execute("select rematch(%s, null)", ([posting_id],))
+    if outcome == "unchanged" and _match_keys(conn, posting_id) - before:
+        # A late-arriving document produced a new keyword hit: worth flagging.
+        conn.execute(
+            "update postings set last_changed_at = clock_timestamp(), last_seen_at = now() where id = %s",
+            (posting_id,),
+        )
+        outcome = "updated"
+
+    if outcome != "unchanged" and not baseline:
         conn.execute(
             "insert into posting_events (posting_id, kind, content_hash) values (%s, %s, %s)",
             (posting_id, outcome, new_hash),
         )
-    conn.execute("select rematch(%s, null)", ([posting_id],))
     return outcome, posting_id
+
+
+def _match_keys(conn: psycopg.Connection, posting_id: int) -> set[tuple]:
+    return set(conn.execute(
+        """select m.keyword_id, m.source, coalesce(i.position, -1), coalesce(d.url, '')
+           from matches m left join items i on i.id = m.item_id
+           left join documents d on d.id = m.document_id
+           where m.posting_id = %s""",
+        (posting_id,),
+    ).fetchall())

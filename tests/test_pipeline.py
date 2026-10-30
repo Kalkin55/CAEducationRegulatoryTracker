@@ -195,3 +195,25 @@ def test_full_text_search(conn, fetcher):
 def test_run_skips_agencies_without_scrapers(conn, fetcher):
     results = pipeline.run(conn, fetcher, ["fcc"], today=TODAY)
     assert results[0].skipped and results[0].error == "scraper not built yet"
+
+
+def test_late_document_with_new_keyword_hit_flags_update(conn, fetcher):
+    mark_succeeded_before(conn)
+    pid = run_once(conn, fetcher, [nov_meeting()]).new[0]  # report not downloadable yet
+    uid = add_user(conn)
+    conn.execute("insert into reviews (posting_id, user_id) values (%s, %s)", (pid, uid))
+    conn.commit()
+    fetcher.pages[REPORT_URL] = ("Staff recommend denying the charter petition.", "text/plain")
+    r = run_once(conn, fetcher, [nov_meeting()])
+    assert r.updated == [pid]
+    assert status(conn, pid) == "updated"
+
+
+def test_late_document_without_new_hits_is_not_a_change(conn, fetcher):
+    mark_succeeded_before(conn)
+    pid = run_once(conn, fetcher, [nov_meeting()]).new[0]
+    fetcher.pages[REPORT_URL] = ("Routine minutes.", "text/plain")
+    r = run_once(conn, fetcher, [nov_meeting()])
+    assert r.unchanged == 1 and not r.updated
+    text, = conn.execute("select text from documents where posting_id = %s", (pid,)).fetchone()
+    assert text == "Routine minutes."  # stored and searchable all the same

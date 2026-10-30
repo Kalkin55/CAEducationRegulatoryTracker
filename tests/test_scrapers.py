@@ -140,3 +140,41 @@ def test_calstrs_listing_and_meeting():
     assert items[2].description.startswith("Appeals Committee - 2:30 p.m. (Nov 3) · Session: Open")
     assert items[-1].description.startswith("Regular Meeting - 10:45 a.m. (Nov 5)")
     assert (docs[0].label, docs[0].item_index) == ("Item 01", 0)
+
+
+def test_sbe_listing_and_agenda():
+    from tracker.scrapers.cde import SBE, parse_agenda_page
+
+    listing = SBE().parse_listing((FIX / "sbe/index.html").read_bytes())
+    assert listing[0] == ("202609", "https://www.cde.ca.gov/be/ag/ag/yr26/agenda202609.asp",
+                          "September 9, 2026", dt.date(2026, 9, 9))
+    items, docs = parse_agenda_page((FIX / "sbe/agenda202609.html").read_bytes(), listing[0][1])
+    assert len(items) == 29
+    assert items[5].number == "06"
+    assert items[5].title.startswith("Assignment of Charter School Numbers to Newly Established Charter Schools")
+    assert items[10].number == "W-01"
+    assert len(docs) == 42
+    assert docs[0].url == "https://www.cde.ca.gov/be/ag/ag/yr26/documents/sep26item01.docx"
+    assert (docs[2].label, docs[2].item_index) == ("Item 02 Attachment 1 (DOCX)", 1)
+
+
+def test_accs_listing_and_agenda():
+    from tracker.scrapers.cde import ACCS, parse_agenda_page
+
+    listing = ACCS().parse_listing((FIX / "accs/accsagendas.html").read_bytes())
+    assert listing[0][:3] == ("accsnotice100626", "https://www.cde.ca.gov/be/cc/cs/accsnotice100626.asp",
+                              "October 6, 2026")
+    assert any(label.endswith("(Canceled)") for _, _, label, _ in listing)
+    items, docs = parse_agenda_page((FIX / "accs/accsnotice100626.html").read_bytes(), listing[0][1])
+    assert [i.number for i in items] == ["01", "02", "03"]
+    assert "Highlands Community Charter School" in items[1].title
+    assert all(d.item_index is not None for d in docs)
+
+
+def test_long_dates():
+    from tracker.scrapers.common import parse_long_date
+
+    assert parse_long_date("September 2026") is None  # no day: don't read "20" from the year
+    assert parse_long_date("Nov. 5-6, 2026") == dt.date(2026, 11, 5)
+    assert parse_long_date("Tuesday, November 3", dt.date(2026, 10, 30)) == dt.date(2026, 11, 3)
+    assert parse_long_date("January 8", dt.date(2026, 12, 20)) == dt.date(2027, 1, 8)

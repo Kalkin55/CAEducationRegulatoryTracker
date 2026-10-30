@@ -178,3 +178,15 @@ def test_long_dates():
     assert parse_long_date("Nov. 5-6, 2026") == dt.date(2026, 11, 5)
     assert parse_long_date("Tuesday, November 3", dt.date(2026, 10, 30)) == dt.date(2026, 11, 3)
     assert parse_long_date("January 8", dt.date(2026, 12, 20)) == dt.date(2027, 1, 8)
+
+
+def test_ccee_meetings_from_wordpress_api():
+    from tracker.scrapers.ccee import CCEE
+
+    page = json.loads((FIX / "ccee/pages-meetings.json").read_text())
+    postings = CCEE().parse(page["content"]["rendered"], today=dt.date(2026, 10, 30))
+    # Scheduled meetings without documents are skipped; history is limited to ~a year.
+    assert [p.meeting_date for p in postings] == [
+        dt.date(2026, 8, 13), dt.date(2026, 6, 18), dt.date(2026, 2, 26), dt.date(2025, 12, 18)]
+    assert postings[0].title.startswith("CCEE Governing Board Meeting - August 13, 2026")
+    assert [d.label for d in postings[0].documents] == ["Agenda", "Public Correspondence"]

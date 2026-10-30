@@ -62,3 +62,50 @@ def test_ctc_meeting_with_items_and_documents():
     assert len(p.documents) == 11
     insert = next(d for d in p.documents if "INSERT" in (d.label or ""))
     assert insert.url == f"{BASE}/Document/Download/10915" and p.items[insert.item_index].number == "5"
+
+
+def test_opsc_meetings_including_ones_without_documents_yet():
+    from tracker.scrapers.opsc import OPSC
+
+    postings = OPSC().parse((FIX / "opsc/meetings.html").read_bytes(), dt.date(2026, 10, 30))
+    assert [(p.title, len(p.documents)) for p in postings] == [
+        ("State Allocation Board Meeting - October 28, 2026", 2),
+        ("Charter School Facilities Program Webinar - November 3, 2026", 0),  # year inferred
+        ("Stakeholder Meeting - November 5, 2026", 2),
+    ]
+    assert postings[0].documents[1].label == "SAB Agenda with Supporting Documentation"
+
+
+def test_csfa_listing_and_staff_reports():
+    from tracker.scrapers.csfa import CSFA
+
+    meetings = CSFA().parse_listing((FIX / "csfa/meeting.html").read_bytes())
+    assert len(meetings) == 10
+    assert meetings[0]["date"] == dt.date(2026, 10, 29)
+    assert [label for label, _ in meetings[0]["links"]] == ["Agenda", "Staff Reports and Resolutions"]
+    assert meetings[2]["cancelled"] and not meetings[2]["links"]
+
+    items, docs = CSFA().parse_staff_page((FIX / "csfa/october-29-2026-staff.html").read_bytes(),
+                                          "https://www.treasurer.ca.gov/x")
+    assert [i.number for i in items] == ["4", "5", "6", "7", "8", "9", "10", "11", "12"]
+    assert "Tree of Life International Charter" in items[2].title
+    assert len(docs) == 21
+    # Item 12 is split over two list entries on the page; both documents stay with it.
+    assert [d.item_index for d in docs[-2:]] == [8, 8]
+
+
+def test_fppc_listing_and_agenda():
+    from tracker.scrapers.fppc import FPPC
+
+    listing = FPPC().parse_listing((FIX / "fppc/commission-hearings.html").read_bytes())
+    assert len(listing) == 7
+    assert listing[0] == ("https://www.fppc.ca.gov/events/commission-hearings/2026/oct-2026-agenda/",
+                          "October 15, 2026")
+
+    items, docs = FPPC().parse_agenda((FIX / "fppc/oct-2026-agenda.html").read_bytes(),
+                                      "https://www.fppc.ca.gov/events/commission-hearings/2026/oct-2026-agenda/")
+    assert [i.number for i in items] == [str(n) for n in range(1, 11)]
+    assert items[2].title == "In the Matter of Michael Gatto and Joshua Meister; FPPC Case No. 20/945."
+    assert items[2].description.startswith("Staff: Neal Bucknell")
+    assert len(docs) == 28
+    assert (docs[1].label, docs[1].item_index) == ("Gatto and Meister - Stipulation", 2)

@@ -49,7 +49,7 @@ def cmd_run(args) -> int:
             for r in results:
                 status = "skipped" if r.skipped else ("ok" if r.ok else "FAILED")
                 print(f"{r.agency_id:15} {status:8} new={len(r.new)} updated={len(r.updated)} "
-                      f"unchanged={r.unchanged} {r.error or ''}")
+                      f"unchanged={r.unchanged} already_posted={r.baseline} {r.error or ''}")
             if args.dry_run:
                 print_matches(conn, [i for r in results for i in r.new + r.updated])
                 conn.rollback()

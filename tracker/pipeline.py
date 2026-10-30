@@ -39,6 +39,7 @@ class AgencyResult:
     new: list[int] = field(default_factory=list)
     updated: list[int] = field(default_factory=list)
     unchanged: int = 0
+    baseline: int = 0  # first run: past meetings loaded as already posted
     consecutive_failures: int = 0
 
 
@@ -95,7 +96,9 @@ def run_agency(conn: psycopg.Connection, fetcher: Fetcher, agency_id: str,
             seen_keys.add(p.external_key)
             baseline = first_run and not (p.meeting_date and p.meeting_date >= today)
             outcome, posting_id = store_posting(conn, fetcher, agency_id, p, today, baseline)
-            if outcome == "new" and not baseline:
+            if outcome == "new" and baseline:
+                result.baseline += 1
+            elif outcome == "new":
                 result.new.append(posting_id)
             elif outcome == "updated":
                 result.updated.append(posting_id)
@@ -108,8 +111,8 @@ def run_agency(conn: psycopg.Connection, fetcher: Fetcher, agency_id: str,
             (len(seen_keys), agency_id),
         )
         conn.commit()
-        log.info("%s: %d new, %d updated, %d unchanged", agency_id,
-                 len(result.new), len(result.updated), result.unchanged)
+        log.info("%s: %d new, %d updated, %d unchanged, %d already posted", agency_id,
+                 len(result.new), len(result.updated), result.unchanged, result.baseline)
         return result
     except Exception as e:
         conn.rollback()

@@ -55,6 +55,7 @@ def cmd_run(args) -> int:
                 conn.rollback()
                 print("\n(dry run: nothing was saved)")
                 return 0
+            write_step_summary(results)
             notify.send_health_alerts(results)
             if not args.no_email:
                 notify.send_user_alerts(conn, "immediate")
@@ -62,6 +63,24 @@ def cmd_run(args) -> int:
         return 1 if failed and len(failed) == len([r for r in results if not r.skipped]) else 0
     finally:
         fetcher.close()
+
+
+def write_step_summary(results) -> None:
+    """On GitHub Actions, show a per-agency table on the run's page."""
+    path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not path:
+        return
+    from tracker.agencies import BY_ID
+
+    lines = ["| Agency | Result | New | Updated | Unchanged | First run (already posted) |",
+             "|---|---|---|---|---|---|"]
+    for r in results:
+        result = ("Not automated yet" if r.skipped else "OK" if r.ok
+                  else f"Failed: {(r.error or '').replace('|', '/')[:150]}")
+        lines.append(f"| {BY_ID[r.agency_id].name} | {result} | {len(r.new)} | {len(r.updated)} "
+                     f"| {r.unchanged} | {r.baseline} |")
+    with open(path, "a") as f:
+        f.write("\n".join(lines) + "\n")
 
 
 def preview(fetcher: Fetcher, agency_ids: list[str]) -> int:

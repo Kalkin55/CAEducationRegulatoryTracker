@@ -12,15 +12,32 @@ GitHub Actions (every 2h) ──► Python scrapers ──► Supabase Postgres 
 
 ## Status
 
-| Part | State |
-|---|---|
-| Database schema, keyword matching, review status, search, access rules | Done, tested |
-| Pipeline: change detection, document text extraction, failure tracking | Done, tested |
-| Email: immediate alerts, daily digest, scraper-failure alerts | Done, tested |
-| Dashboard: inbox, posting detail, agencies, keywords, search, settings | Done |
-| Per-agency scrapers | **Not started.** Waiting on network access to the agency sites (see below) |
+| Agency | Automated | Notes |
+|---|---|---|
+| AG Legal Opinions | Yes | One posting per opinion; pending → issued shows as an update |
+| AG Ballot Initiatives | Yes | Amendments (e.g. 26-0006A2) update the original initiative |
+| Commission on Teacher Credentialing | Yes | Reads the portal's data feed and each meeting's items |
+| Office of Public School Construction | Yes | Meetings appear before their documents are posted |
+| California School Finance Authority | Yes | Items come from each meeting's staff reports page |
+| Fair Political Practices Commission | Yes | |
+| CalPERS | Yes | Committee agenda pages for the two latest months |
+| CalSTRS | Yes | All committees of each board meeting |
+| CCEE | Yes | Via the site's public WordPress API (the HTML page is behind Cloudflare) |
+| State Board of Education | Yes, rate-limited | cde.ca.gov challenges automated clients; see below |
+| Advisory Commission on Charter Schools | Yes, rate-limited | Same site as SBE |
+| California Practitioners Advisory Group | Not yet | Same site; page couldn't be fetched to build against |
+| FCC Open Commission Meetings | Not yet | fcc.gov denies automated requests; planned via the Federal Register API |
+| Educational Audit Appeals Panel | Not yet | Behind Cloudflare with no public feed: check by hand |
 
-Until an agency has a scraper, the dashboard shows it as "Not automated yet: check by hand".
+Agencies that aren't automated show in the dashboard as "Not automated yet: check by hand".
+
+**cde.ca.gov:** the site uses bot protection (Radware) that challenges automated
+requests. The tracker spaces requests to it 8 seconds apart, makes at most 20
+per run, and stops for the run as soon as it is challenged. Agenda pages list
+every item's subject, so keyword hits on titles show up right away; item
+documents are downloaded a few per run. If GitHub's servers are challenged
+consistently, the dashboard flags SBE/ACCS as failing. In that case, running
+the scraper from an office computer (a self-hosted GitHub runner) usually works.
 
 ## How it behaves
 

@@ -55,8 +55,8 @@ def test_new_posting_is_stored_matched_and_flagged(conn, fetcher):
     assert status(conn, pid) == "new"
     rows = conn.execute(
         """select k.term, m.source from matches m join keywords k on k.id = m.keyword_id
-           where m.posting_id = %s order by 1, 2""", (pid,)).fetchall()
-    assert rows == [("SB 740", "document"), ("charter", "document")]
+           where m.posting_id = %s""", (pid,)).fetchall()
+    assert set(rows) == {("SB 740", "document"), ("charter", "document")}
     assert conn.execute("select count(*) from posting_events where posting_id = %s",
                         (pid,)).fetchone()[0] == 1
 

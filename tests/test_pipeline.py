@@ -193,7 +193,7 @@ def test_full_text_search(conn, fetcher):
 
 
 def test_run_skips_agencies_without_scrapers(conn, fetcher):
-    results = pipeline.run(conn, fetcher, ["fcc"], today=TODAY)
+    results = pipeline.run(conn, fetcher, ["eaap"], today=TODAY)
     assert results[0].skipped and results[0].error == "scraper not built yet"
 
 

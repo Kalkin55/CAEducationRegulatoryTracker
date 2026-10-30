@@ -1,0 +1,1132 @@
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="ca.ctc.r4.version" content="3.2.18.0" />
+        <meta name="ca.ctc.dotnet.version" content="10.0.14" />
+        <meta name="Author" content="State of California" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+        <link rel="apple-touch-icon-precomposed" sizes="100x100" href="/r4/asset/themes/CAST/images/apple-touch-icon-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="192x192" href="/r4/asset/themes/CAST/images/apple-touch-icon-192x192.png">
+        <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/r4/asset/themes/CAST/images/apple-touch-icon-180x180.png">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/r4/asset/themes/CAST/images/apple-touch-icon-152x152.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/r4/asset/themes/CAST/images/apple-touch-icon-144x144.png">
+        <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/r4/asset/themes/CAST/images/apple-touch-icon-120x120.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/r4/asset/themes/CAST/images/apple-touch-icon-114x114.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/r4/asset/themes/CAST/images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/r4/asset/themes/CAST/images/apple-touch-icon-57x57.png">
+        <link rel="apple-touch-icon" href="/r4/asset/themes/CAST/images/apple-touch-icon.png">
+
+        <link title="Fav Icon" rel="icon" href="/r4/asset/icons/public/favicon.ico">
+        <link rel="shortcut icon" href="/r4/asset/icons/public/favicon.ico" />
+
+        <title> | Commission on Teacher Credentialing</title>
+        <meta name="robots" content="max-image-preview:large" />
+
+        <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="//translate.google.com" />
+        <link rel="dns-prefetch" href="//alert.cdt.ca.gov" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+
+        <link rel="stylesheet" id="googlefonts-cached-css" href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic&#038;subset=latin,latin-ext&#038;display=swap" type="text/css" media="all" />
+        <link rel="stylesheet" id="cagov-core-theme-style-css" href="/r4/asset/themes/CAST/css/oceanside.min.css" type="text/css" media="all" />
+        <link rel="stylesheet" id="caweb-core-style-css" href="/r4/asset/themes/CAST/css/caweb-core.min.css" type="text/css" media="all" />
+        <link rel="stylesheet" id="caweb-google-font-style-css" href="https://fonts.googleapis.com/css?family=Asap+Condensed%3A400%2C600%7CSource+Sans+Pro%3A400%2C700&#038;ver=1.13.3" type="text/css" media="all" />
+        <link rel="stylesheet" id="caweb-external-custom-css" href="/r4/asset/themes/CAST/css/structure.css" type="text/css" media="all" />
+
+        <script type="text/javascript" defer crossorigin="anonymous" src="https://alert.cdt.ca.gov/alert.js" id="cagov-statewide-alerts-js"></script>
+        <!-- BEGIN Google Tag Manager -->
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+        <script>
+                var stateGTMAccount = "GTM-NJ6Q4MV";
+                (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                (function(){dataLayer.push(arguments)})('config',"G-9Z3X1V5F6E",{cookie_flags:'secure;samesite=lax;domain='});
+                })(window,document,'script','dataLayer',stateGTMAccount);
+        </script>
+        <!-- END Google Tag Manager -->
+        <!-- BEGIN CTC/R4 Standard Styles -->
+        <link rel="stylesheet" href="/r4/asset/css/ctc-r4.css" type="text/css" />
+        <link rel="stylesheet" href="/r4/asset/css/ctc-r4-cast.css" type="text/css" />
+        <link rel="stylesheet" href="/r4/core/asset/css/ctc-r4-core.css" type="text/css" />
+        <link rel="stylesheet" href="/r4/core/asset/css/ctc-r4-core-cast.css" type="text/css" />
+        <link rel="stylesheet" href="/r4/asset/themes/M9/css/icons.min.css" type="text/css" />
+        <!-- END CTC/R4 Standard Styles -->
+        <link href="https://kendo.cdn.telerik.com/themes/13.1.1/bootstrap/bootstrap-main.css" media="all" rel="stylesheet" type="text/css"></link>
+        <link rel="stylesheet" href="/r4/kendo/asset/css/ctc-kendo.css" type="text/css" />
+        <script type="text/javascript" src="/r4/asset/lib/jquery/jquery.min.js"></script>
+        <script src="https://kendo.cdn.telerik.com/2026.1.415/js/kendo.all.min.js" type="text/javascript"></script><script src="https://kendo.cdn.telerik.com/2026.1.415/js/kendo.aspnetmvc.min.js" type="text/javascript"></script>
+        <script >(typeof KendoLicensing === 'object' && KendoLicensing.setScriptKey('141j041f611f063e0837023e133i0i490g310c3a18445h425d3857385c315f3e613a57485j155i124g014801230d25161k131c3458101b0d2g0d2e4a5a3859365c442f0b560e1e3659121g111b0h5a0i1i0j1f06200a1j0a1h064961154f1k321e4g07551c39023i04602d06391c4k163j2i55472e5i28043e1c5a1a5k2g53105b1e3h2d4f1f391d5f25154c2g502154094g084f2f554727522e593c4h005g29452h09472d600k5i0i350h5k3051471449092e592a5k0k4f0a551h3b2j4j2a5k3c025324331c3g0d4d053e165a0h3j164k1c3d15243e0a4i1a37193d2i4a534427600k3i4e22421a244c2a54490j5g0i4d1j370g51264k1d4k28582e0e38235j0539175714402f4k4510321d0h4b083i1g52255h3a04385d193k2k5304391a375c255i283906532034153f16214h17411h56025h0a3k4d2d331c0j360f41114b501b3b0j1h52305001445129003d133a5k1f4a124f23501b4612355b320c2k5647123415204j0d3c1e5h1246521h3d2543144c200j2j3i5j042650055e1321440k613b1659165a0h5f23454c02421h3f223f05401f0g1k3106361d4g2742153k27310g500g42183g30431623320j1e5i2g3g096123400d1b58124b2b512i561b3g5f3g1a203h1b4i3k1d56101f561i5447143d2h432350482049214c432446294e3k0a4c2014603b0f2k4d23312803391a5e035912562f48560e544a1f4f09570i5g1b51155f3b5g155a372742012b375a1h5e2i440830380e3c085k1f582a0751033d1b5h083h04410h2i0b2f5i1d0k421f3a275k1058135g0b492d5c0c551k352248195k205g3a193j4j22191j315e17514a01410j472e4j1b322d0e5e1d0i1f601h3j21540158355b0d2f49274d0k5h0b4g3k2f0b3a1j3g2i3b1f3c175b0c5430084h002661073j06512j0d3c042i3g4e0720472f0d4e0j431i424c22372034065j0g5i3c5a4a0b3320440d350b1h10591h380c610h1k5404395h0d1b115h2a4i243200524a1f5911530b1k5b1k'));window._wrappersMetadata = Object.freeze({"name":"@progress/kendo-ui","productCode":"UIASPCORE","productName":"Telerik UI for ASP.NET Core","version":"2026.1.415","licensingDocsUrl":"https://www.telerik.com/aspnet-core-ui/documentation/installation/activating-your-license/setting-up-your-license"});</script>
+        <script type="text/javascript">
+                document.documentElement.className =
+                    document.documentElement.className.replace("no-js", "js");
+        </script>
+        <!--BEGIN Application Specific Header -->
+        
+		<link rel="stylesheet" href="/css/site.css?v=q_or7BpFG0prgs_TKvr60YjxaMS8TJJtcu8r1SmPM7w" />
+		
+
+
+	
+        <!--END Application Specific Header -->
+    </head>
+
+    <body>
+        <header id="header" class="global-header">
+            <div id="skip-to-content"><a href="#main-content">Skip to Main Content</a></div>
+            <div id="caweb_alerts" class="alerts">
+                <script>
+                    jQuery(document).ready(function ($) {
+                        $('.caweb-alert-close').on('click', function (e) {
+                            var alert_id = this.dataset.alert;
+                            document.cookie = 'caweb-alert-' + alert_id + '=false;path=/';
+                            $('#caweb-alert-${alert_id}')[0].remove();
+                        });
+                    });
+                </script>
+            </div>
+
+            <!-- Utility Header -->
+            <div class="utility-header">
+                <div class="container d-flex flex-row">
+                    <div class="social-media-links">
+                        <div class="header-cagov-logo">
+                            <a href="https://www.ca.gov/" title="CA.gov website">
+                                <span class="sr-only">CA.gov</span>
+                                <span class="ca-gov-logo-svg"></span>
+                            </a>
+                        </div>
+                        <p class="official-tag">Official website of the State of California</p>
+                    </div>
+                    <div class="settings-links">
+                        <a class="utility-custom-1" href="https://www.ctc.ca.gov/" target="_self">
+                            Home
+                        </a>
+                        <a class="utility-siebel"
+                               href="https://educator.ctc.ca.gov/siebel/app/esales/enu?SWECmd=Login"
+                               target="_blank">
+                            CTC Online
+                        </a>
+                        <a id="caweb-gtrans-custom" target="1" href="https://www.ctc.ca.gov/site-pages/translate"
+                               aria-label="Google Custom Translate">
+                            <span class="ca-gov-icon-globe"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Branding -->
+            <div class="branding border-bottom">
+                <div class="container d-flex flex-row">
+                    <div class="header-organization-banner">
+                        <a href="/">
+                            <img src="/r4/asset/images/homepage-logo-2.png" alt="Commission Logo" />
+                        </a>
+                    </div>
+                    <button type="button" class="mobile-control toggle-menu ca-gov-icon-menu fs-2" data-bs-toggle="collapse"
+                            data-bs-target=".mobile-controlled" aria-expanded="false" aria-controls="mobile-controls"
+                            aria-label="Open the navigation menu">
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Controls -->
+            <div id="mobile-controls" class="mobile-controlled overlay collapse collapse-horizontal">
+                <button type="button" class="mobile-control toggle-menu ca-gov-icon-close-mark fs-1" data-bs-toggle="collapse"
+                        data-bs-target=".mobile-controlled" aria-expanded="false" aria-controls="mobile-controls"
+                        aria-label="Closes the navigation menu">
+                </button>
+            </div>
+
+            <div>
+                <!-- Navigation -->
+                <div class="navigation border-bottom">
+                    <div class="container">
+                        <ul class="nav" aria-label="Main navigation">
+                            <li class="menu-item nav-item">
+                                <a href="https://www.ctc.ca.gov/" class="nav-link">
+                                   <i class="mdi mdi-home"></i> Commission Home
+                                </a>
+                            </li>
+                            
+
+	<li class="menu-item nav-item"><a class="nav-link" href="/"><span><i class="mdi mdi-calendar-month-outline"></i> Meetings</span></a></li>
+	<li class="menu-item nav-item"><a class="nav-link" href="/PublicComments"><span><i class="mdi mdi-comment"></i> Meeting Comments</span></a></li>
+
+
+	
+                        </ul>
+                    </div>
+                </div>
+                
+
+
+            </div>
+
+        </header>
+
+        <div id="page-container" class="page-container">
+            <div id="et-main-area">
+                <div id="main-content" class="main-content" tabindex="-1">
+                    <main class="main-primary">
+                        
+	
+<span id="popupNotification" name="popupNotification"></span><script>(typeof KendoLicensing === 'object' && KendoLicensing.setScriptKey('141j041f611f063e0837023e133i0i490g310c3a18445h425d3857385c315f3e613a57485j155i124g014801230d25161k131c3458101b0d2g0d2e4a5a3859365c442f0b560e1e3659121g111b0h5a0i1i0j1f06200a1j0a1h064961154f1k321e4g07551c39023i04602d06391c4k163j2i55472e5i28043e1c5a1a5k2g53105b1e3h2d4f1f391d5f25154c2g502154094g084f2f554727522e593c4h005g29452h09472d600k5i0i350h5k3051471449092e592a5k0k4f0a551h3b2j4j2a5k3c025324331c3g0d4d053e165a0h3j164k1c3d15243e0a4i1a37193d2i4a534427600k3i4e22421a244c2a54490j5g0i4d1j370g51264k1d4k28582e0e38235j0539175714402f4k4510321d0h4b083i1g52255h3a04385d193k2k5304391a375c255i283906532034153f16214h17411h56025h0a3k4d2d331c0j360f41114b501b3b0j1h52305001445129003d133a5k1f4a124f23501b4612355b320c2k5647123415204j0d3c1e5h1246521h3d2543144c200j2j3i5j042650055e1321440k613b1659165a0h5f23454c02421h3f223f05401f0g1k3106361d4g2742153k27310g500g42183g30431623320j1e5i2g3g096123400d1b58124b2b512i561b3g5f3g1a203h1b4i3k1d56101f561i5447143d2h432350482049214c432446294e3k0a4c2014603b0f2k4d23312803391a5e035912562f48560e544a1f4f09570i5g1b51155f3b5g155a372742012b375a1h5e2i440830380e3c085k1f582a0751033d1b5h083h04410h2i0b2f5i1d0k421f3a275k1058135g0b492d5c0c551k352248195k205g3a193j4j22191j315e17514a01410j472e4j1b322d0e5e1d0i1f601h3j21540158355b0d2f49274d0k5h0b4g3k2f0b3a1j3g2i3b1f3c175b0c5430084h002661073j06512j0d3c042i3g4e0720472f0d4e0j431i424c22372034065j0g5i3c5a4a0b3320440d350b1h10591h380c610h1k5404395h0d1b115h2a4i243200524a1f5911530b1k5b1k'));window._wrappersMetadata = Object.freeze({"name":"@progress/kendo-ui","productCode":"UIASPCORE","productName":"Telerik UI for ASP.NET Core","version":"2026.1.415","licensingDocsUrl":"https://www.telerik.com/aspnet-core-ui/documentation/installation/activating-your-license/setting-up-your-license"});kendo.syncReady(function(){jQuery("#popupNotification").kendoNotification({"autoHideAfter":2000,"height":"25px","position":{"pinned":true},"stacking":"default","width":"300px"});});</script>
+
+<script type="text/javascript">
+	var popupNotification = null;
+
+	$(function () {
+		popupNotification = getPopupNotification();
+	});
+
+	function getPopupNotification() {
+		return $("#popupNotification").data("kendoNotification");
+	}
+</script>
+	
+                        
+
+
+
+
+
+
+
+
+    <style type="text/css">
+
+        .r4-page-breadcrumb-container {
+            margin-top:10px;
+            margin-bottom:20px;
+        }
+
+        .r4-page-title-block {
+            background-color: #eaeef6;
+            margin-bottom:10px;
+        }
+
+        .r4-page-title-container {
+            margin-bottom: 27px;
+        }
+
+        .r4-page-title-text {
+            font-family: 'Montserrat',Helvetica,Arial,Lucida,sans-serif;
+            font-size: 40px;
+            font-weight: 600;
+            color: #254994 !important;
+            margin-bottom: 10px;
+        }
+
+    </style>
+    <div class="row r4-page-title-block">
+        <div class="col col-sm-10 offset-sm-1">
+                <div class="row">
+                    <div class="col r4-page-breadcrumb-container">
+                        <nav aria-label="Breadcrumb" class="breadcrumbs">
+                            <ol class="breadcrumb" style="margin-bottom: 0px; font-size: 16px;">
+                                    <li><a href="https://www.ctc.ca.gov">Commission Home</a></li>
+                                    <li><a href="/">Meetings</a></li>
+                                    <li><a>This Meeting</a></li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            <div class="row">
+                <div class="col r4-page-title-container">
+                    <h1 class="r4-page-title-text"><i class="mdi mdi-calendar-month-outline"></i>Committee on Accreditation Meeting - October 29, 2026 (October 29, 2026)</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.6.82/pdf.min.mjs" type="module"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.6.82/pdf.worker.mjs" type="module"></script>
+
+<div id="pdfViewerModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="pdfViewerModelLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<div class="modal-header bg-info py-1">
+				<h2 class="modal-title text-white">PDF Viewer</h2>
+			</div>
+			<div class="modal-body">
+
+				<div class="row">
+					<div class="col">
+						<label for="Title">Title</label><br />
+						<span class="ctc-core-form-display" id="pdfViewer-Title"></span>
+					</div>
+					<div class="col">
+						<label for="Filename">Filename</label><br />
+						<span class="ctc-core-form-display" id="pdfViewer-FileName"></span>
+					</div>
+					<div class="col">
+						<label for="File_Size__KB_">File Size (KB)</label><br />
+						<span class="ctc-core-form-display" id="pdfViewer-FileSize"></span>
+					</div>
+				</div>
+
+				<div id="pdfViewer">
+				</div>
+
+				<script>
+				</script>
+			</div>
+			<div class="modal-footer">
+				<button id="pdfViewerModel_Close" type="button" class="btn btn-secondary waves-effect">Close</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="module">
+	$(document).ready(function () {
+
+	var pdfViewer = $("#pdfViewer").kendoPDFViewer({
+	pdfjsProcessing: {
+	file: "https://demos.telerik.com/kendo-ui/content/web/pdfViewer/sample.pdf"     },
+	width: "100%",
+	height: 600
+	}).data("kendoPDFViewer");
+
+	// $("#loadFile").click(function () {
+	// 	pdfViewer.fromFile("https://demos.telerik.com/kendo-ui/content/web/pdfViewer/How Does Kendo UI Cut Development Time.pdf")
+	// });
+	});
+</script>
+
+
+
+<style>
+	#pdfViewer {
+		width: 100% !important;
+	}
+</style>
+
+<div class="row">
+	<div class="col-sm-10 offset-sm-1">
+		<div class="row">
+			<div class="col">
+				<div class="card shadow">
+					<div class="card-body">
+						<fieldset>
+							<div class="d-flex flex-column text-center flex-xl-row align-items-xl-center gap-3 mb-4">
+
+<span class="ctc-r4-display-label">Comment Period</span>									<div class="d-flex align-items-center justify-content-center gap-1 text-nowrap mx-auto mx-xl-0" style="font-size: 0.9rem; font-weight: normal;">
+										<span class="ctc-r4-form-display"><span class="badge bg-danger">Closed</span> Oct 19, 2026 - Oct 26, 2026</span>
+										<i class="mdi mdi-information info-tooltip" style="color: #17a2b8; font-size: 14px; margin-left: 1px;"
+										   data-toggle="tooltip" data-title="Displays Submit Comment button only if published Agenda Items exists."></i>
+									</div>
+								<div class="ms-xl-auto d-flex align-items-center justify-content-center gap-3">
+								</div>
+							</div>
+						</fieldset>
+						
+
+
+						
+							
+						
+<p><title>Commission Meeting Details</title><style type="text/css">body { font-size: 11.5pt; } .meeting_details_header { font-size: 10.5pt; font-weight: bold; text-align: center; color: #616161; } .indented { text-indent: 20px; } </style></p><div class="meeting_details_header">Committee on Accreditation<br />May Lee State Office Complex<br />Commission on Teacher Credentialing<br />651 Bannon Street, Suite 600<br />Sacramento, CA 95811<br /></div><p>&nbsp;</p><p><span style="box-sizing:border-box;color:#6c757d;font-family:Roboto, sans-serif;font-size:16.8667px;background-color:#ffffff;"><strong>Meeting Participation at the Commission Office</strong></span><br style="box-sizing:border-box;color:#6c757d;font-family:Roboto, sans-serif;font-size:16.8667px;background-color:#ffffff;" /><span style="color:#6c757d;font-family:Roboto, sans-serif;font-size:16.8667px;background-color:#ffffff;">The meeting will be accessible for public participation at the May Lee State Office Complex, 651 Bannon Street, Southeast (SE) Tower, Multipurpose Center, Room SE. 235.</span></p><p><strong>Meeting Participation via Zoom Webcast</strong><br />The Committee on Accreditation meeting will be accessible for public participation either in person at the Commission offices, at each of the locations listed on the agenda, through a Zoom webcast, and telephone. The following link is provided to access the webcast on October 29, 2026. <br /><br />Select Link to Join Meeting <a href="https://us02web.zoom.us/j/86892400630" target="_blank">October 29, 2026 9:00am</a> Meeting ID: 868 9240 0630<span style="font-size:15.3333px;"><br /></span></p><p><strong>Meeting Participation via Teleconference</strong><br />If you do not have access to a computer, the public may listen to the COA meeting by dialing US Toll-Free: 888-475-4499 or 877-853-5257. </p><p>Note: Individuals calling from a blocked telephone number who plan to make public comment (see below) on an agenda item must unblock their telephone number by dialing *82 prior to entering the toll-free number listed above. </p><p><strong>Public Comment Guidelines</strong><br />Members of the public wishing to provide public comment during the discussion of an agenda item will be given the opportunity to speak during the public comment period. The Co-Chair will announce when the public comment period is open during the presentation of the agenda item and ask for anyone who wishes to comment to notify the meeting moderator as explained below. </p><ul><li><strong>Participants at the Commission Office</strong>: Individuals who would like to make comments during the meeting who are attending in person will need to complete a public comment card indicating what item they would like to speak on and provide it to the meeting moderator at the location. The Co-Chair will then call on the public member at the appropriate time during the meeting. </li><li><strong>Participants via Zoom Webcast</strong>: Individuals who join the meeting via the Zoom webcast will need to click on the &ldquo;raise hand&rdquo; icon to inform the meeting moderator that they would like to speak on the item being presented. The meeting moderator will notify the individual when it is their turn to speak by calling their Zoom ID (name used by the member of the public when logging into the meeting). At that time, the individual will be prompted to unmute their microphone and will be able to share their comment. <br /><em><strong>Note:</strong> The Zoom ID name used by the member of the public to join the Zoom meeting will be displayed to the public when the individual provides public comment.</em> </li><li><strong>Participants via teleconference</strong>: Individuals who join the meeting using the US Toll-Free number will need to press *9 on their phone to inform the meeting moderator that they would like to speak on the item being presented. The meeting moderator will notify the individual when it is their turn to speak by calling the last four digits of their phone number and will allow them to unmute their telephone. At that time, the individual will be prompted to press *6 and will be able to share their comment. <br /><em><strong>Note:</strong> Only the last four digits of the caller&rsquo;s phone number will be displayed to the public when the individual provides public comment.</em> </li></ul><p><span>Public comment time may be limited depending on the volume of speakers wishing to speak to a particular agenda item. The Co-Chair will notify the public during the item, if this is the case.</span><span></span></p><p><strong>Written Comments Guidelines</strong><br />The public is encouraged, but not required, to submit written comments to the COA in advance for their prior consideration. In order to ensure committee members have sufficient time to review all written comments, members of the public are asked, but not mandated, to submit written comments no later than 12pm on Monday, October 26, 2026 either online or by sending written comments by mail to Commission on Teacher Credentialing, Attn: Division of Standards, Accreditation, and Workforce Investment, May Lee State Office Complex, Commission on Teacher Credentialing, 651 Bannon Street, Suite 600, Sacramento, CA 95811. If you have difficulties hand-mailing or submitting your comments online, please email the Commission at <a href="mailto:accreditation@ctc.ca.gov">accreditation@ctc.ca.gov</a> or call 1-866-866-8609. Individuals who are not able to submit written comments are welcome to make verbal public comment during the meeting (see above). </p><p><strong>Reasonable Accommodation Procedure for Meetings Subject to the Bagley-Keene Open Meeting Act</strong> <br />A request for reasonable accommodation may be made as follows: </p><ol><li>Make the request for accommodation as soon as practicable, preferably before the meeting you wish to attend. The sooner the request is made, the more likely it is that the Commission can provide the requested accommodation or an alternative. </li><li>The request may be made orally or in writing. To avoid delay in the review and processing of your request, please direct your request to the U.S. Toll-Free telephone number, email address, or mailing address as follows: <ul style="list-style-type:none;"><li>U.S. Toll-Free Telephone Number: 1-866-866-8609</li><li>Email Address: <span style="font-size:15.3333px;"><a href="mailto:Accreditation@ctc.ca.gov">Accreditation@ctc.ca.gov</a></span></li><li>Mailing Address: 651 Bannon Street, Suite 600, Sacramento, CA 95811</li></ul></li><li>The request for accommodation must provide the following information: <ol type="a"><li>Identify the proposed accommodation. Tell us the type of accommodation you are seeking, and how the accommodation will allow you to access and participate in the meeting. </li><li>Provide your contact information so we can respond in a timely manner. This can be a mailing address, an email address, or telephone number. Please note that if only a mailing address is provided, you need to make the request early enough that a mailed response can be timely provided. </li><li>Identify or specify the specific meeting(s), including the meeting date(s), for which you are requesting that accommodation be provided. </li><li>All materials submitted in support of a request for accommodation will be kept confidential and will not be disclosed to any third party unless required by law or with the requestor&rsquo;s express written permission. </li></ol></li></ol><p>The Commission&rsquo;s response to a request for reasonable accommodation: </p><ol><li>A Commission staff member who receives a request for reasonable accommodation will respond to the request promptly and as soon as practicable. All responses to written requests will be provided in writing, if the request was made sufficiently in advance such that a written response can be transmitted in a timely manner prior to the start of the specific meeting. Responses will identify whether the accommodation is granted or whether an equally effective alternative has been granted and will provide any instructions necessary for the accommodation to be accessed. If a request is denied, the response will identify the grounds for denial. </li><li>The Commission shall give preference to the requested accommodation. Any doubt regarding whether a request is reasonable should be resolved in favor of accessibility. Commission staff will make reasonable efforts to communicate with requestors to obtain clarification or to discuss whether alternative accommodations are viable. </li><li>The Commission shall deny the accommodation only if it fundamentally alters the nature of the Commission&rsquo;s services, programs, activities, or results in undue financial and administrative burdens, or otherwise creates an undue hardship. </li></ol>
+<script type="text/javascript">
+    function pdfViewerButton_Click(fileId) {
+        var fileId = fileId;
+        showPdf(fileId);
+        return false;
+    }
+
+    $(".info-tooltip").kendoTooltip({
+        showOn: "mouseenter",
+        hideOn: "mouseleave",
+        position: "top",
+        content: function (e) {
+            return $(e.target).data("title");
+        }
+    });
+</script>
+
+
+
+<fieldset class="mt-1">
+	<legend><h2><i class="mdi mdi-calendar-today"></i>Agenda Items</h2></legend>
+		<div class="row">
+			<div class="col">
+				<div class="row">
+					<div class="col">
+						<div class="row meeting-agenda-title mb-2">
+							<div class="col">
+									<h3>Meeting Start </h3>
+
+							</div>
+						</div>
+							<div class="row mb-2">
+								<div class="col">
+									<span class="ctc-r4-form-display">
+										The order of business may be changed without notice. All items may be reordered on the day of the noticed meeting.  All times listed are approximate.
+									</span>
+								</div>
+							</div>
+					</div>
+				</div>
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-warning text-dark p-2">Action</span>
+
+							<span id="8364"><b> Item 1 - Call to Order and Roll Call</b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8364"><i class="mdi mdi-content-copy small"></i></button>
+
+
+
+							<br />
+
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-warning text-dark p-2">Action</span>
+
+							<span id="8365"><b> Item 2 - Approval of the Agenda</b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8365"><i class="mdi mdi-content-copy small"></i></button>
+
+
+
+							<br />
+
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-warning text-dark p-2">Action</span>
+
+							<span id="8366"><b> Item 3 - Approval of the Minutes of the Prior Meeting</b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8366"><i class="mdi mdi-content-copy small"></i></button>
+
+
+								<a style="padding-right: 2px" title="Download Agenda Item for Item 3 - Approval of the Minutes of the Prior Meeting" href="/Document/Download/10901"><i class="mdi mdi mdi-file-document"></i>Download Agenda Item</a>
+
+							<br />
+
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-info text-dark p-2">Information</span>
+
+							<span id="8369"><b> Item 4 - Co-Chair and Member Reports </b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8369"><i class="mdi mdi-content-copy small"></i></button>
+
+
+
+							<br />
+
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-warning text-dark p-2">Action</span>
+
+							<span id="8368"><b> Item 5 - Program Status Changes</b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8368"><i class="mdi mdi-content-copy small"></i></button>
+
+
+								<a style="padding-right: 2px" title="Download Agenda Item for Item 5 - Program Status Changes" href="/Document/Download/10887"><i class="mdi mdi mdi-file-document"></i>Download Agenda Item</a>
+
+							<br />
+
+
+							<div class="row mt-1">
+								<div class="col">
+										<div class="d-flex flex-column gap-2 mt-1 mb-2">
+												<div class"me-2"> 
+														<a style="padding-right: 2px" title="View/Download 05-Program Change of Status INSERT" href="/Document/Download/10915"><i class="mdi mdi-file-download-outline"></i>05-Program Change of Status INSERT</a>
+												</div>
+										</div>
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-success-subtle text-dark p-2">Information/Action</span>
+
+							<span id="8373"><b> Item 6 - Discussion of Institutions Not In Compliance with Accreditation Timelines</b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8373"><i class="mdi mdi-content-copy small"></i></button>
+
+
+
+							<br />
+
+								<div class="mt-1 mb-1">
+									<span class="ctc-r4-form-display" id="agendaItem_Details_Display"><h4><strong>There are no late items to discuss at this time.&nbsp;</strong></h4></span>
+								</div>
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-warning text-dark p-2">Action</span>
+
+							<span id="8666"><b> Item 7 - Report of the Accreditation Site Visit Team to California State University, Stanislaus </b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8666"><i class="mdi mdi-content-copy small"></i></button>
+
+
+								<a style="padding-right: 2px" title="Download Agenda Item for Item 7 - Report of the Accreditation Site Visit Team to California State University, Stanislaus " href="/Document/Download/10888"><i class="mdi mdi mdi-file-document"></i>Download Agenda Item</a>
+
+							<br />
+
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-warning text-dark p-2">Action</span>
+
+							<span id="8667"><b> Item 8 - Actions Take to Address Stipulations for California State University, Channel Islands</b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8667"><i class="mdi mdi-content-copy small"></i></button>
+
+
+								<a style="padding-right: 2px" title="Download Agenda Item for Item 8 - Actions Take to Address Stipulations for California State University, Channel Islands" href="/Document/Download/10902"><i class="mdi mdi mdi-file-document"></i>Download Agenda Item</a>
+
+							<br />
+
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-warning text-dark p-2">Action</span>
+
+							<span id="8668"><b> Item 9 - Removal of Stipulations Related to Completion of SB 488 Literacy Certification </b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8668"><i class="mdi mdi-content-copy small"></i></button>
+
+
+								<a style="padding-right: 2px" title="Download Agenda Item for Item 9 - Removal of Stipulations Related to Completion of SB 488 Literacy Certification " href="/Document/Download/10889"><i class="mdi mdi mdi-file-document"></i>Download Agenda Item</a>
+
+							<br />
+
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-warning text-dark p-2">Action</span>
+
+							<span id="8669"><b> Item 10 - Report of the Accreditation Site Visit Team to Riverside USD</b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8669"><i class="mdi mdi-content-copy small"></i></button>
+
+
+								<a style="padding-right: 2px" title="Download Agenda Item for Item 10 - Report of the Accreditation Site Visit Team to Riverside USD" href="/Document/Download/10903"><i class="mdi mdi mdi-file-document"></i>Download Agenda Item</a>
+
+							<br />
+
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-success-subtle text-dark p-2">Information/Action</span>
+
+							<span id="8670"><b> Item 11 - Discussion and Adoption for Experimental Program Standards Process </b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8670"><i class="mdi mdi-content-copy small"></i></button>
+
+
+								<a style="padding-right: 2px" title="Download Agenda Item for Item 11 - Discussion and Adoption for Experimental Program Standards Process " href="/Document/Download/10885"><i class="mdi mdi mdi-file-document"></i>Download Agenda Item</a>
+
+							<br />
+
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-warning text-dark p-2">Action</span>
+
+							<span id="8671"><b> Item 12 - Report of the Accreditation Site Visit Team to Summit Prep Charter HS </b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8671"><i class="mdi mdi-content-copy small"></i></button>
+
+
+								<a style="padding-right: 2px" title="Download Agenda Item for Item 12 - Report of the Accreditation Site Visit Team to Summit Prep Charter HS " href="/Document/Download/10904"><i class="mdi mdi mdi-file-document"></i>Download Agenda Item</a>
+
+							<br />
+
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-warning text-dark p-2">Action</span>
+
+							<span id="8672"><b> Item 13 - Program Approval Recommendations</b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8672"><i class="mdi mdi-content-copy small"></i></button>
+
+
+								<a style="padding-right: 2px" title="Download Agenda Item for Item 13 - Program Approval Recommendations" href="/Document/Download/10890"><i class="mdi mdi mdi-file-document"></i>Download Agenda Item</a>
+
+							<br />
+
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-warning text-dark p-2">Action</span>
+
+							<span id="8673"><b> Item 14 - Initial Program Approval for New Program Sponsors</b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8673"><i class="mdi mdi-content-copy small"></i></button>
+
+
+
+							<br />
+
+								<div class="mt-1 mb-1">
+									<span class="ctc-r4-form-display" id="agendaItem_Details_Display"><h4>There are no new programs for approval at this time.&nbsp;</h4></span>
+								</div>
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-warning text-dark p-2">Action</span>
+
+							<span id="8674"><b> Item 15 - Approval of the 2025-2026 COA Annual Accreditation Report</b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8674"><i class="mdi mdi-content-copy small"></i></button>
+
+
+								<a style="padding-right: 2px" title="Download Agenda Item for Item 15 - Approval of the 2025-2026 COA Annual Accreditation Report" href="/Document/Download/10914"><i class="mdi mdi mdi-file-document"></i>Download Agenda Item</a>
+
+							<br />
+
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-info text-dark p-2">Information</span>
+
+							<span id="8370"><b> Item 16 - Staff Reports</b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8370"><i class="mdi mdi-content-copy small"></i></button>
+
+
+
+							<br />
+
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-info text-dark p-2">Information</span>
+
+							<span id="8371"><b> Public Comments</b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8371"><i class="mdi mdi-content-copy small"></i></button>
+
+
+
+							<br />
+
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+					<div class="row mt-2 mb-1">
+						<div class="col" id="AgendaItemTitleContainer">
+								<span class="badge rounded-pill bg-info text-dark p-2">Information</span>
+
+							<span id="8372"><b> Adjournment</b> </span>
+							<button class="btn btn-light cpbtn waves-effect waves-light btn-xs py-0 px-2" type="button" data-clipboard-text="https://meetings.ctc.ca.gov/Details/381#8372"><i class="mdi mdi-content-copy small"></i></button>
+
+
+
+							<br />
+
+
+							<div class="row mt-1">
+								<div class="col">
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+
+							</div>
+						</div>
+					</div>
+					<hr class="mb-0" />
+			</div>
+		</div>
+		<br />
+		<div class="row">
+			<div class="col">
+				<div class="row">
+					<div class="col">
+						<div class="row meeting-agenda-title mb-2">
+							<div class="col">
+									<h3>Meeting End</h3>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br />
+</fieldset>
+
+	<div class="row mt-2 float-end">
+		<div class="col">
+			<a class="btn btn-secondary waves-effect waves-light" href="/"><i class="mdi mdi-arrow-left"></i> Back</a>
+		</div>
+	</div>
+
+<form id="ArchivedDocumentSubmittalForm" action="#" method="post" name="ArchivedDocumentSubmittalForm">
+	<div id="RequestArchivedDocumentModalWindow" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="RequestArchivedDocumentModalLabel" style="display: none;" aria-hidden="true">
+		<div class="modal-dialog" style="--bs-modal-width: 600px !important">
+			<div class="modal-content">
+				<div class="modal-header bg-primary">
+					<h2 class="modal-title text-light" id="emailMyResultModalLabel">Request Archived Document</h2>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div id="RequestArchivedDocument_ErrorContainer" style="display:none;">
+						<div class="alert alert-danger">
+							<strong>Error(s):</strong>
+							<ul id="RequestArchivedDocument_ErrorDetails"></ul>
+						</div>
+					</div>
+					<div id="RequestArchivedDocument_FormContainer"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-secondary disabled" id="emailSendButton">Send</button>
+					<button type="button" class="btn btn-secondary" id="cancelButton" data-bs-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+<style>
+	.ctclink :hover {
+		cursor: pointer;
+	}
+</style>
+
+<script type="text/javascript">
+	var agendaDocumentId;
+	var email;
+	let isChecked = $('#RequestingAccessibleDocumentCheckbox').is(':checked');
+
+	$('#RequestingAccessibleDocumentCheckbox').change(function () {
+		isChecked = $(this).is(':checked');
+	});
+
+	// Send email to server
+	$("#ArchivedDocumentSubmittalForm").submit(function (e) {
+		e.preventDefault();
+		$("#RequestArchivedDocument_ErrorContainer").hide();
+
+		if (email == "") {
+			$("#ErrorMessage").html("Email is mandatory.");
+			$("#ErrorMessageContainer").show();
+			return false;
+		}
+
+		var dataToSend = $("form[name=ArchivedDocumentSubmittalForm]").serialize();
+		console.log(dataToSend);
+
+		$.ajax({
+			url: "/ArchivedDocumentRequest/Create",
+			data: dataToSend,
+			cache: false,
+			async: true,
+			method: "POST",
+			dataType: "json"
+		}).done(function (data) {
+			if (data.IsSuccess) {
+				//disable email send after a success
+				$("#emailSendButton").addClass('disabled');
+				$("#emailSendButton").addClass('btn-secondary');
+				$("#emailSendButton").removeClass('btn-success');
+				$("#RequestArchivedDocumentModalWindow").modal("hide");
+				document.getElementById('ArchivedDocumentRequest_EmailAddress').value = '';
+				popupNotification.show("Email sent successfully!", "success");
+				$("#ErrorMessageContainer").hide();
+				$('#RequestingAccessibleDocumentCheckbox').prop('checked', false);
+				isChecked = false;
+			}
+			else {
+				var html = "";
+				$.each(data.Messages, function(index, message){
+					if(message.Type == 0){
+						html += "<li>" + message.Message + "</li>";
+					}
+				})
+
+				$("#RequestArchivedDocument_ErrorContainer").show();
+				$("#RequestArchivedDocument_ErrorDetails").html(html);
+
+				$("#ErrorMessage").html("There is an error sending the email. Please verify your email address.");
+				$("#ErrorMessageContainer").show();
+			}
+		});
+	});
+
+	$(function () {
+		$(document).on("click", ".requestarchiveddocumentactionbutton", requestArchivedDocumentActionButton_Click);
+
+		$("#cancelButton").click(function (e) {
+			$("#emailSendButton").addClass('disabled');
+			$("#emailSendButton").addClass('btn-secondary');
+			$("#emailSendButton").removeClass('btn-success');
+			document.getElementById('ArchivedDocumentRequest_EmailAddress').value = '';
+			$("#ErrorMessageContainer").hide();
+		});
+	});
+
+	$(function () {
+		new ClipboardJS('.cpbtn');
+		var hash = window.location.hash.substring(1);
+		if (jQuery.trim(hash).length > 0) {
+			$('html, body').animate({
+				scrollTop: $("#" + hash).offset().top - 150
+			}, 100);
+		}
+	});
+
+	// $(".pdfviewer-launcher").click(function (e) {
+	// 	e.preventDefault();
+	// 	var fileId = $(this).data("fileid");
+	// 	showPdf(fileId);
+	// });
+
+	function requestArchivedDocumentActionButton_Click(e) {
+		var title = $(this).data("title");
+		var documentId = $(this).data("documentid");
+
+		var request = 
+		{
+			DocumentId: documentId,
+			Title: title
+		}
+
+		$.ajax({
+			url: "/ArchivedDocumentRequest/Create",
+			data: request,
+			cache: false,
+			async: true,
+			method: "GET",
+			dataType: "HTML"
+		}).done(function(results){
+			$("#RequestArchivedDocumentModalWindow").modal("show");
+			$("#RequestArchivedDocument_FormContainer").html(results);
+		});
+	}
+</script>					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        <footer class="global-footer">
+            <div class="container">
+                <div class="d-flex">
+                    <ul class="nav footer-links">
+                        <li class="nav-item">
+                            <a href="https://www.ca.gov" class="nav-link ps-0" title="CA.gov" target="_blank">
+                                <span class="ca-gov-logo-svg"></span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://registertovote.ca.gov/">Register to Vote</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://www.gov.ca.gov/">Governor&#039;s Website</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="https://www.ctc.ca.gov/site-information/accessibility/">Accessibility</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                   href="https://www.ctc.ca.gov/site-information/accessibility/accessibility-certification/">
+                                Accessibility
+                                Certification
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                   href="https://www.ctc.ca.gov/site-information/conditions-of-use/">
+                                Conditions of
+                                Use
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="https://www.ctc.ca.gov/site-information/privacy-policy/">Privacy Policy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://www.ctc.ca.gov/site-information/site-map/">Site Map</a>
+                        </li>
+                    </ul>
+                    <ul class="nav social-share-links">
+                        <li class="nav-item">
+                            <a class="nav-link ca-gov-icon-facebook" href="https://www.facebook.com/CalCTC"
+                                   title="Commission&#039;s Facebook Profile" target="_blank">
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ca-gov-icon-linkedin" href="https://www.linkedin.com/company/cal-ctc"
+                                   title="Commission&#039;s LinkedIn Profile" target="_blank">
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ca-gov-icon-youtube" href="https://www.youtube.com/user/CalTeacherCommission"
+                                   title="Commission&#039;s YouTube Channel" target="_self">
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Copyright Statement -->
+            <div class="copyright">
+                <div class="container">
+                    <div class="d-flex">
+                        <p class="me-auto">
+                            Copyright <span aria-hidden="true">&copy;</span> 2026 State of California
+                        </p>
+                        
+
+
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="return-top">Back to top</button>
+        </footer>
+        <!-- Extra Decorative Content -->
+        <div class="decoration-last">&nbsp;</div>
+        <script type="text/javascript" src="/r4/asset/themes/CAST/js/oceanside.min.js" id="cagov-core-script-js"></script>
+        <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" id="google-translate-caweb-js"></script>
+        <script type="text/javascript" id="google-translate-caweb-js-after">
+            /* <![CDATA[ */
+            function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+            pageLanguage: "en", gaTrack: true, autoDisplay: false,
+            layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+            }, "google_translate_element");
+            }
+            /* ]]> */
+        </script>
+        <script type="text/javascript" src="/r4/asset/js/ctc-r4.js"></script>
+        <script type="text/javascript" src="/r4/asset/js/ctc-r4-cast.js"></script>
+        <script type="text/javascript" src="/r4/asset/js/clipboard.js"></script>
+        <script type="text/javascript" src="/r4/kendo/asset/js/ctc-r4-kendo-grid.js"></script>
+        <script type="text/javascript" src="/r4/asset/js/ctc-r4-init.js"></script>
+        
+		<script src="/js/site.js?v=qJ6sF6fAQn4m-8y39hiFs0CzFE8ldTJ8vZrFRoBAU5U"></script>
+	
+    </body>
+</html>

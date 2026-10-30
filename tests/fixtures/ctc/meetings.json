@@ -1,0 +1,32 @@
+{
+ "Data": [
+  {
+   "AgendaItemCount": "19",
+   "AutoPublishPublicComments": false,
+   "BeginOn": "2026-10-29T09:00:00",
+   "BeginOnChartDisplay": "Oct, 2026",
+   "BroadcastLinkForToday": null,
+   "CommentsAcceptedBeginOn": "2026-10-19T00:00:00",
+   "CommentsAcceptedEndOn": "2026-10-26T00:00:00",
+   "CommentsDocumentBasedCount": "0",
+   "CommentsNonDocumentBasedCount": "0",
+   "Description": null,
+   "EndOn": "2026-10-29T16:30:00",
+   "HasBroadcastLinkForToday": false,
+   "Id": "381",
+   "IsArchived": false,
+   "IsCommentsAccepted": false,
+   "IsMeetingSingleDay": true,
+   "MeetingCommentCount": "0",
+   "MeetingCommentPublishedCount": "0",
+   "StatusId": "3",
+   "StatusName": "Published",
+   "Title": "Committee on Accreditation Meeting - October 29, 2026",
+   "TypeId": "3",
+   "TypeName": "Committee on Accreditation (COA)"
+  }
+ ],
+ "Total": "368",
+ "AggregateResults": null,
+ "Errors": null
+}

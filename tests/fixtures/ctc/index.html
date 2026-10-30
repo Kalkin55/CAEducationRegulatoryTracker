@@ -1,0 +1,473 @@
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="ca.ctc.r4.version" content="3.2.18.0" />
+        <meta name="ca.ctc.dotnet.version" content="10.0.14" />
+        <meta name="Author" content="State of California" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+        <link rel="apple-touch-icon-precomposed" sizes="100x100" href="/r4/asset/themes/CAST/images/apple-touch-icon-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="192x192" href="/r4/asset/themes/CAST/images/apple-touch-icon-192x192.png">
+        <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/r4/asset/themes/CAST/images/apple-touch-icon-180x180.png">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/r4/asset/themes/CAST/images/apple-touch-icon-152x152.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/r4/asset/themes/CAST/images/apple-touch-icon-144x144.png">
+        <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/r4/asset/themes/CAST/images/apple-touch-icon-120x120.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/r4/asset/themes/CAST/images/apple-touch-icon-114x114.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/r4/asset/themes/CAST/images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/r4/asset/themes/CAST/images/apple-touch-icon-57x57.png">
+        <link rel="apple-touch-icon" href="/r4/asset/themes/CAST/images/apple-touch-icon.png">
+
+        <link title="Fav Icon" rel="icon" href="/r4/asset/icons/public/favicon.ico">
+        <link rel="shortcut icon" href="/r4/asset/icons/public/favicon.ico" />
+
+        <title>Meetings | Commission on Teacher Credentialing</title>
+        <meta name="robots" content="max-image-preview:large" />
+
+        <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="//translate.google.com" />
+        <link rel="dns-prefetch" href="//alert.cdt.ca.gov" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+
+        <link rel="stylesheet" id="googlefonts-cached-css" href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic&#038;subset=latin,latin-ext&#038;display=swap" type="text/css" media="all" />
+        <link rel="stylesheet" id="cagov-core-theme-style-css" href="/r4/asset/themes/CAST/css/oceanside.min.css" type="text/css" media="all" />
+        <link rel="stylesheet" id="caweb-core-style-css" href="/r4/asset/themes/CAST/css/caweb-core.min.css" type="text/css" media="all" />
+        <link rel="stylesheet" id="caweb-google-font-style-css" href="https://fonts.googleapis.com/css?family=Asap+Condensed%3A400%2C600%7CSource+Sans+Pro%3A400%2C700&#038;ver=1.13.3" type="text/css" media="all" />
+        <link rel="stylesheet" id="caweb-external-custom-css" href="/r4/asset/themes/CAST/css/structure.css" type="text/css" media="all" />
+
+        <script type="text/javascript" defer crossorigin="anonymous" src="https://alert.cdt.ca.gov/alert.js" id="cagov-statewide-alerts-js"></script>
+        <!-- BEGIN Google Tag Manager -->
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+        <script>
+                var stateGTMAccount = "GTM-NJ6Q4MV";
+                (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                (function(){dataLayer.push(arguments)})('config',"G-9Z3X1V5F6E",{cookie_flags:'secure;samesite=lax;domain='});
+                })(window,document,'script','dataLayer',stateGTMAccount);
+        </script>
+        <!-- END Google Tag Manager -->
+        <!-- BEGIN CTC/R4 Standard Styles -->
+        <link rel="stylesheet" href="/r4/asset/css/ctc-r4.css" type="text/css" />
+        <link rel="stylesheet" href="/r4/asset/css/ctc-r4-cast.css" type="text/css" />
+        <link rel="stylesheet" href="/r4/core/asset/css/ctc-r4-core.css" type="text/css" />
+        <link rel="stylesheet" href="/r4/core/asset/css/ctc-r4-core-cast.css" type="text/css" />
+        <link rel="stylesheet" href="/r4/asset/themes/M9/css/icons.min.css" type="text/css" />
+        <!-- END CTC/R4 Standard Styles -->
+        <link href="https://kendo.cdn.telerik.com/themes/13.1.1/bootstrap/bootstrap-main.css" media="all" rel="stylesheet" type="text/css"></link>
+        <link rel="stylesheet" href="/r4/kendo/asset/css/ctc-kendo.css" type="text/css" />
+        <script type="text/javascript" src="/r4/asset/lib/jquery/jquery.min.js"></script>
+        <script src="https://kendo.cdn.telerik.com/2026.1.415/js/kendo.all.min.js" type="text/javascript"></script><script src="https://kendo.cdn.telerik.com/2026.1.415/js/kendo.aspnetmvc.min.js" type="text/javascript"></script>
+        <script >(typeof KendoLicensing === 'object' && KendoLicensing.setScriptKey('141j041f611f063e0837023e133i0i490g310c3a18445h425d3857385c315f3e613a57485j155i124g014801230d25161k131c3458101b0d2g0d2e4a5a3859365c442f0b560e1e3659121g111b0h5a0i1i0j1f06200a1j0a1h064961154f1k321e4g07551c39023i04602d06391c4k163j2i55472e5i28043e1c5a1a5k2g53105b1e3h2d4f1f391d5f25154c2g502154094g084f2f554727522e593c4h005g29452h09472d600k5i0i350h5k3051471449092e592a5k0k4f0a551h3b2j4j2a5k3c025324331c3g0d4d053e165a0h3j164k1c3d15243e0a4i1a37193d2i4a534427600k3i4e22421a244c2a54490j5g0i4d1j370g51264k1d4k28582e0e38235j0539175714402f4k4510321d0h4b083i1g52255h3a04385d193k2k5304391a375c255i283906532034153f16214h17411h56025h0a3k4d2d331c0j360f41114b501b3b0j1h52305001445129003d133a5k1f4a124f23501b4612355b320c2k5647123415204j0d3c1e5h1246521h3d2543144c200j2j3i5j042650055e1321440k613b1659165a0h5f23454c02421h3f223f05401f0g1k3106361d4g2742153k27310g500g42183g30431623320j1e5i2g3g096123400d1b58124b2b512i561b3g5f3g1a203h1b4i3k1d56101f561i5447143d2h432350482049214c432446294e3k0a4c2014603b0f2k4d23312803391a5e035912562f48560e544a1f4f09570i5g1b51155f3b5g155a372742012b375a1h5e2i440830380e3c085k1f582a0751033d1b5h083h04410h2i0b2f5i1d0k421f3a275k1058135g0b492d5c0c551k352248195k205g3a193j4j22191j315e17514a01410j472e4j1b322d0e5e1d0i1f601h3j21540158355b0d2f49274d0k5h0b4g3k2f0b3a1j3g2i3b1f3c175b0c5430084h002661073j06512j0d3c042i3g4e0720472f0d4e0j431i424c22372034065j0g5i3c5a4a0b3320440d350b1h10591h380c610h1k5404395h0d1b115h2a4i243200524a1f5911530b1k5b1k'));window._wrappersMetadata = Object.freeze({"name":"@progress/kendo-ui","productCode":"UIASPCORE","productName":"Telerik UI for ASP.NET Core","version":"2026.1.415","licensingDocsUrl":"https://www.telerik.com/aspnet-core-ui/documentation/installation/activating-your-license/setting-up-your-license"});</script>
+        <script type="text/javascript">
+                document.documentElement.className =
+                    document.documentElement.className.replace("no-js", "js");
+        </script>
+        <!--BEGIN Application Specific Header -->
+        
+		<link rel="stylesheet" href="/css/site.css?v=q_or7BpFG0prgs_TKvr60YjxaMS8TJJtcu8r1SmPM7w" />
+	
+        <!--END Application Specific Header -->
+    </head>
+
+    <body>
+        <header id="header" class="global-header">
+            <div id="skip-to-content"><a href="#main-content">Skip to Main Content</a></div>
+            <div id="caweb_alerts" class="alerts">
+                <script>
+                    jQuery(document).ready(function ($) {
+                        $('.caweb-alert-close').on('click', function (e) {
+                            var alert_id = this.dataset.alert;
+                            document.cookie = 'caweb-alert-' + alert_id + '=false;path=/';
+                            $('#caweb-alert-${alert_id}')[0].remove();
+                        });
+                    });
+                </script>
+            </div>
+
+            <!-- Utility Header -->
+            <div class="utility-header">
+                <div class="container d-flex flex-row">
+                    <div class="social-media-links">
+                        <div class="header-cagov-logo">
+                            <a href="https://www.ca.gov/" title="CA.gov website">
+                                <span class="sr-only">CA.gov</span>
+                                <span class="ca-gov-logo-svg"></span>
+                            </a>
+                        </div>
+                        <p class="official-tag">Official website of the State of California</p>
+                    </div>
+                    <div class="settings-links">
+                        <a class="utility-custom-1" href="https://www.ctc.ca.gov/" target="_self">
+                            Home
+                        </a>
+                        <a class="utility-siebel"
+                               href="https://educator.ctc.ca.gov/siebel/app/esales/enu?SWECmd=Login"
+                               target="_blank">
+                            CTC Online
+                        </a>
+                        <a id="caweb-gtrans-custom" target="1" href="https://www.ctc.ca.gov/site-pages/translate"
+                               aria-label="Google Custom Translate">
+                            <span class="ca-gov-icon-globe"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Branding -->
+            <div class="branding border-bottom">
+                <div class="container d-flex flex-row">
+                    <div class="header-organization-banner">
+                        <a href="/">
+                            <img src="/r4/asset/images/homepage-logo-2.png" alt="Commission Logo" />
+                        </a>
+                    </div>
+                    <button type="button" class="mobile-control toggle-menu ca-gov-icon-menu fs-2" data-bs-toggle="collapse"
+                            data-bs-target=".mobile-controlled" aria-expanded="false" aria-controls="mobile-controls"
+                            aria-label="Open the navigation menu">
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Controls -->
+            <div id="mobile-controls" class="mobile-controlled overlay collapse collapse-horizontal">
+                <button type="button" class="mobile-control toggle-menu ca-gov-icon-close-mark fs-1" data-bs-toggle="collapse"
+                        data-bs-target=".mobile-controlled" aria-expanded="false" aria-controls="mobile-controls"
+                        aria-label="Closes the navigation menu">
+                </button>
+            </div>
+
+            <div>
+                <!-- Navigation -->
+                <div class="navigation border-bottom">
+                    <div class="container">
+                        <ul class="nav" aria-label="Main navigation">
+                            <li class="menu-item nav-item">
+                                <a href="https://www.ctc.ca.gov/" class="nav-link">
+                                   <i class="mdi mdi-home"></i> Commission Home
+                                </a>
+                            </li>
+                            
+
+	<li class="menu-item nav-item"><a class="nav-link" href="/"><span><i class="mdi mdi-calendar-month-outline"></i> Meetings</span></a></li>
+	<li class="menu-item nav-item"><a class="nav-link" href="/PublicComments"><span><i class="mdi mdi-comment"></i> Meeting Comments</span></a></li>
+
+
+	
+                        </ul>
+                    </div>
+                </div>
+                
+
+
+            </div>
+
+        </header>
+
+        <div id="page-container" class="page-container">
+            <div id="et-main-area">
+                <div id="main-content" class="main-content" tabindex="-1">
+                    <main class="main-primary">
+                        
+	
+<span id="popupNotification" name="popupNotification"></span><script>(typeof KendoLicensing === 'object' && KendoLicensing.setScriptKey('141j041f611f063e0837023e133i0i490g310c3a18445h425d3857385c315f3e613a57485j155i124g014801230d25161k131c3458101b0d2g0d2e4a5a3859365c442f0b560e1e3659121g111b0h5a0i1i0j1f06200a1j0a1h064961154f1k321e4g07551c39023i04602d06391c4k163j2i55472e5i28043e1c5a1a5k2g53105b1e3h2d4f1f391d5f25154c2g502154094g084f2f554727522e593c4h005g29452h09472d600k5i0i350h5k3051471449092e592a5k0k4f0a551h3b2j4j2a5k3c025324331c3g0d4d053e165a0h3j164k1c3d15243e0a4i1a37193d2i4a534427600k3i4e22421a244c2a54490j5g0i4d1j370g51264k1d4k28582e0e38235j0539175714402f4k4510321d0h4b083i1g52255h3a04385d193k2k5304391a375c255i283906532034153f16214h17411h56025h0a3k4d2d331c0j360f41114b501b3b0j1h52305001445129003d133a5k1f4a124f23501b4612355b320c2k5647123415204j0d3c1e5h1246521h3d2543144c200j2j3i5j042650055e1321440k613b1659165a0h5f23454c02421h3f223f05401f0g1k3106361d4g2742153k27310g500g42183g30431623320j1e5i2g3g096123400d1b58124b2b512i561b3g5f3g1a203h1b4i3k1d56101f561i5447143d2h432350482049214c432446294e3k0a4c2014603b0f2k4d23312803391a5e035912562f48560e544a1f4f09570i5g1b51155f3b5g155a372742012b375a1h5e2i440830380e3c085k1f582a0751033d1b5h083h04410h2i0b2f5i1d0k421f3a275k1058135g0b492d5c0c551k352248195k205g3a193j4j22191j315e17514a01410j472e4j1b322d0e5e1d0i1f601h3j21540158355b0d2f49274d0k5h0b4g3k2f0b3a1j3g2i3b1f3c175b0c5430084h002661073j06512j0d3c042i3g4e0720472f0d4e0j431i424c22372034065j0g5i3c5a4a0b3320440d350b1h10591h380c610h1k5404395h0d1b115h2a4i243200524a1f5911530b1k5b1k'));window._wrappersMetadata = Object.freeze({"name":"@progress/kendo-ui","productCode":"UIASPCORE","productName":"Telerik UI for ASP.NET Core","version":"2026.1.415","licensingDocsUrl":"https://www.telerik.com/aspnet-core-ui/documentation/installation/activating-your-license/setting-up-your-license"});kendo.syncReady(function(){jQuery("#popupNotification").kendoNotification({"autoHideAfter":2000,"height":"25px","position":{"pinned":true},"stacking":"default","width":"300px"});});</script>
+
+<script type="text/javascript">
+	var popupNotification = null;
+
+	$(function () {
+		popupNotification = getPopupNotification();
+	});
+
+	function getPopupNotification() {
+		return $("#popupNotification").data("kendoNotification");
+	}
+</script>
+	
+                        
+
+
+
+
+
+
+    <style type="text/css">
+
+        .r4-page-breadcrumb-container {
+            margin-top:10px;
+            margin-bottom:20px;
+        }
+
+        .r4-page-title-block {
+            background-color: #eaeef6;
+            margin-bottom:10px;
+        }
+
+        .r4-page-title-container {
+            margin-bottom: 27px;
+        }
+
+        .r4-page-title-text {
+            font-family: 'Montserrat',Helvetica,Arial,Lucida,sans-serif;
+            font-size: 40px;
+            font-weight: 600;
+            color: #254994 !important;
+            margin-bottom: 10px;
+        }
+
+    </style>
+    <div class="row r4-page-title-block">
+        <div class="col col-sm-10 offset-sm-1">
+                <div class="row">
+                    <div class="col r4-page-breadcrumb-container">
+                        <nav aria-label="Breadcrumb" class="breadcrumbs">
+                            <ol class="breadcrumb" style="margin-bottom: 0px; font-size: 16px;">
+                                    <li><a href="https://www.ctc.ca.gov">Commission Home</a></li>
+                                    <li><a href="/">Meetings</a></li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            <div class="row">
+                <div class="col r4-page-title-container">
+                    <h1 class="r4-page-title-text"><i class="mdi mdi-calendar-month-outline"></i> Meetings</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<div class="row">
+	<div class="col-sm-10 offset-sm-1">
+		<div class="row">
+			<div class="col">
+				<div class="card shadow">
+					<div class="card-body">
+						<p class="mb-0">
+							Current and recent events and meetings, including Commission Meetings, webcasts, Committee on Accreditation meetings and others.  Members of the public wishing to address the Commission on a subject to be considered during meetings are asked to submit their comments using the <em><a href="/MeetingComment/Submit">Submit Comment</a></em> button next to the meeting/event listed (if comment period is open).
+						</p>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+	<div class="col-xl-8">
+		<div class="card shadow">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-xl-5">
+						<span class="ctc-r4-control-label"><label for="Search_Parameters_Title">Title</label></span><br/><input class="form-control" id="Search_Parameters_Title" name="Search.Parameters.Title" type="text" value="" />
+					</div>
+					<div class="col-xl-2">
+						<span class="ctc-r4-control-label"><label for="Search_Parameters_Year">Year</label></span><br />
+						<input id="Search_Parameters_Year" name="Search.Parameters.Year" style="width:100%" type="text" value="2026" /><script>kendo.syncReady(function(){jQuery("#Search_Parameters_Year").kendoDropDownList({"autoBind":true,"dataTextField":"Name","dataValueField":"Id","optionLabel":"All Years","value":"2026","dataSource":[{"Name":"2027","Id":2027},{"Name":"2026","Id":2026},{"Name":"2025","Id":2025},{"Name":"2024","Id":2024},{"Name":"2023","Id":2023},{"Name":"2022","Id":2022},{"Name":"2021","Id":2021},{"Name":"2020","Id":2020},{"Name":"2019","Id":2019},{"Name":"2018","Id":2018},{"Name":"2017","Id":2017},{"Name":"2016","Id":2016},{"Name":"2015","Id":2015},{"Name":"2014","Id":2014},{"Name":"2013","Id":2013},{"Name":"2012","Id":2012},{"Name":"2011","Id":2011},{"Name":"2010","Id":2010},{"Name":"2009","Id":2009},{"Name":"2008","Id":2008},{"Name":"2007","Id":2007},{"Name":"2006","Id":2006},{"Name":"2005","Id":2005},{"Name":"2004","Id":2004},{"Name":"2003","Id":2003},{"Name":"2002","Id":2002},{"Name":"2001","Id":2001},{"Name":"2000","Id":2000},{"Name":"1999","Id":1999},{"Name":"1998","Id":1998}]});});</script>
+					</div>
+					<div class="col-xl-5">
+						<span class="ctc-r4-control-label"><label for="Search_Parameters_Type">Type</label></span><br />
+						<input id="Search_Parameters_Type" name="Search.Parameters.Type" style="width:100%" type="text" value="" /><script>kendo.syncReady(function(){jQuery("#Search_Parameters_Type").kendoDropDownList({"dataTextField":"Name","dataValueField":"Id","optionLabel":"All Types","dataSource":{"type":(function(){if(kendo.data.transports['aspnetmvc-ajax']){return 'aspnetmvc-ajax';} else{throw new Error('The kendo.aspnetmvc.min.js script is not included.');}})(),"transport":{"read":{"url":"/MetsStaticValue/GetDataSourceResult?type=MeetingType"},"prefix":""},"serverPaging":true,"serverSorting":true,"serverFiltering":true,"serverGrouping":true,"serverAggregates":true,"sort":[{"field":"DisplayOrder","dir":"asc"}],"filter":[],"schema":{"data":"Data","total":"Total","errors":"Errors"}}});});</script>
+					</div>
+				</div>
+				<div class="row mt-2 float-end">
+					<div class="col">
+						<button type="submit" name="SearchButton" id="SearchButton" class="btn btn-primary waves-effect waves-light"><i class="mdi mdi-magnify"></i> Search</button>
+						<a name="ResetButton" id="ResetButton" class="btn btn-secondary waves-effect waves-light" href="/"><i class="mdi mdi-refresh"></i> Reset</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col">
+		<div class="card shadow">
+			<div class="card-body">
+
+				<div id="MeetingGrid" name="MeetingGrid"></div><script>kendo.syncReady(function(){jQuery("#MeetingGrid").kendoGrid({"dataBound":MeetingGrid_DataBound,"navigatable":true,"noRecords":{"template":jQuery('#NoGridRecordsTemplate').html()},"sortable":true,"columns":[{"title":"Actions","attributes":{"style":"vertical-align:top;"},"template":"\u003cdiv style=\u0027display:flex; gap:5px;\u0027\u003e\u003ca class=\"btn btn-primary btn-xs waves-effect waves-light\" href=\"/Details/#:Id#\"\u003e\u003cdiv class=\"d-md-none d-lg-none d-xl-none justify-content-center\"\u003e\u003ci class=\"mdi mdi-arrow-right\"\u003e\u003c/i\u003e \u003c/div\u003e\u003cdiv class=\"d-none d-md-flex text-nowrap justify-content-center\"\u003e\u003ci class=\"mdi mdi-arrow-right\"\u003e\u003c/i\u003e Select\u003c/div\u003e\u003c/a\u003e # if (HasBroadcastLinkForToday) { # \u003ca href=\u0027#:BroadcastLinkForToday#\u0027 class=\u0027btn btn-primary btn-xs\u0027 target=\u0027_blank\u0027 rel=\u0027noopenerTemplate\u0027\u003e\u003ci class=\u0027mdi mdi-video\u0027\u003e\u003c/i\u003e Watch Broadcast\u003c/a\u003e# } #\u003c/div\u003e","headerTemplate":"\u003ci class=\u0027mdi mdi-cursor-pointer\u0027 title=\u0027Actions\u0027 data-tooltip=\u0027tooltip\u0027\u003e\u003c/i\u003e\u003cspan class=\u0027sr-only\u0027\u003eActions\u003c/span\u003e"},{"attributes":{"style":"vertical-align:top;"},"template":" # if (IsCommentsAccepted) { # \u003ca class=\"btn btn-secondary btn-xs waves-effect waves-light\" href=\"/MeetingComment/Submit?meetingId=#:Id#\"\u003e\u003cdiv class=\"d-md-none d-lg-none d-xl-none justify-content-center\"\u003e\u003ci class=\"mdi mdi-comment-plus-outline\"\u003e\u003c/i\u003e \u003c/div\u003e\u003cdiv class=\"d-none d-md-flex text-nowrap justify-content-center\"\u003e\u003ci class=\"mdi mdi-comment-plus-outline\"\u003e\u003c/i\u003e  Submit Comment\u003c/div\u003e\u003c/a\u003e# } else { # --  # } #","headerTemplate":"\u003ci class=\"mdi mdi-comment-outline\" title=\"Submit Written Public Comment\" data-tooltip=\"tooltip\"\u003e\u003c/i\u003e\u003cspan class=\"sr-only\"\u003eSubmit Written Public Comment\u003c/span\u003e","field":"Id","sortable":false,"filterable":false,"encoded":true},{"title":"Title","attributes":{"style":"vertical-align:top;"},"width":"50%","field":"Title","filterable":{"checkAll":false},"encoded":true},{"title":"Meeting Date(s)","attributes":{"style":"vertical-align:top;"},"width":"20%","template":kendo.template(jQuery('#MeetingDatesColumnTemplate').html()),"field":"BeginOn","sortable":false,"filterable":false,"encoded":true},{"title":"# Comments","attributes":{"style":"vertical-align:top;"},"width":"10%","minScreenWidth":600,"headerTemplate":"# Comments","field":"MeetingCommentPublishedCount","sortable":false,"filterable":false,"encoded":true}],"pageable":{"refresh":true,"pageSizes":[10,25,50,100,200],"buttonCount":5},"filterable":true,"scrollable":false,"dataSource":{"type":(function(){if(kendo.data.transports['aspnetmvc-ajax']){return 'aspnetmvc-ajax';} else{throw new Error('The kendo.aspnetmvc.min.js script is not included.');}})(),"transport":{"read":{"url":"/GetDataSourceResult","data":MeetingGridReadData},"prefix":""},"pageSize":10,"page":1,"groupPaging":false,"total":0,"serverPaging":true,"serverSorting":true,"serverFiltering":true,"serverGrouping":true,"serverAggregates":true,"sort":[{"field":"BeginOn","dir":"desc"}],"filter":[],"schema":{"data":"Data","total":"Total","errors":"Errors","model":{"fields":{"AgendaItemCount":{"editable":false,"type":"number"},"AutoPublishPublicComments":{"type":"boolean"},"BeginOn":{"type":"date"},"BeginOnChartDisplay":{"type":"string"},"BroadcastLinkForToday":{"type":"string"},"CommentsAcceptedBeginOn":{"editable":false,"type":"date","defaultValue":null},"CommentsAcceptedEndOn":{"editable":false,"type":"date","defaultValue":null},"CommentsDocumentBasedCount":{"editable":false,"type":"number"},"CommentsNonDocumentBasedCount":{"editable":false,"type":"number"},"Description":{"type":"string"},"EndOn":{"type":"date"},"HasBroadcastLinkForToday":{"type":"boolean"},"Id":{"type":"number"},"IsArchived":{"type":"boolean"},"IsCommentsAccepted":{"editable":false,"type":"boolean"},"IsMeetingSingleDay":{"editable":false,"type":"boolean"},"MeetingCommentCount":{"editable":false,"type":"number"},"MeetingCommentPublishedCount":{"editable":false,"type":"number"},"StatusId":{"type":"number"},"StatusName":{"type":"string"},"Title":{"type":"string"},"TypeId":{"type":"number"},"TypeName":{"type":"string"}}}}}});});</script>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+	$(function () {
+
+	});
+
+	$(document).keypress(function (e) {
+		if (e.keyCode === 13) {
+			reloadGrid();
+			return false;
+		}
+	});
+
+	function reloadGrid() {
+		refreshKendoGrid("MeetingGrid");
+	}
+
+	$("#SearchButton").click(function (e) {
+		reloadGrid();
+
+		return false;
+	});
+
+	function MeetingGridReadData() {
+		return {
+			title: $("#Search_Parameters_Title").val(),
+			year: $("#Search_Parameters_Year").data("kendoDropDownList").value(),
+			type: $("#Search_Parameters_Type").data("kendoDropDownList").value()
+		};
+	}
+
+	function MeetingGrid_DataBound(e) {
+
+		var grid = $("#MeetingGrid").data("kendoGrid");
+		var data = grid.dataSource.data();
+
+		$.each(data, function (i, row) {
+			if (row.IsArchived) {
+				$('tr[data-uid="' + row.uid + '"]').addClass("alert alert-archived");
+			}
+		});
+	}
+</script>
+
+<script id="ActionColumnClientTemplate" type="text/x-kendo-template">
+
+	<a href="/Details/TargetId">Select</a>
+</script>
+
+<script id="MeetingGridToolbarTemplate" type="text/x-kendo-template">
+</script>
+
+<script id="MeetingDatesColumnTemplate" type="text/x-kendo-template">
+
+	# if (!IsMeetingSingleDay) { #
+	#= kendo.toString(kendo.parseDate(BeginOn, 'MM/dd/yyyy'), 'MM/dd/yyyy') # - #= kendo.toString(kendo.parseDate(EndOn, 'MM/dd/yyyy'), 'MM/dd/yyyy') #
+	# } else { #
+	#= kendo.toString(kendo.parseDate(BeginOn, 'MM/dd/yyyy'), 'MM/dd/yyyy') #
+	# } #
+</script>
+
+<script id="NoGridRecordsTemplate" type="text/x-kendo-template">
+	<div class="text-center text-danger font-weight-semibold mt-2 mb-2" style="display:block;">
+		There are no meetings to display.
+	</div>
+</script>
+	</div>
+</div>
+
+
+
+
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        <footer class="global-footer">
+            <div class="container">
+                <div class="d-flex">
+                    <ul class="nav footer-links">
+                        <li class="nav-item">
+                            <a href="https://www.ca.gov" class="nav-link ps-0" title="CA.gov" target="_blank">
+                                <span class="ca-gov-logo-svg"></span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://registertovote.ca.gov/">Register to Vote</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://www.gov.ca.gov/">Governor&#039;s Website</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="https://www.ctc.ca.gov/site-information/accessibility/">Accessibility</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                   href="https://www.ctc.ca.gov/site-information/accessibility/accessibility-certification/">
+                                Accessibility
+                                Certification
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                   href="https://www.ctc.ca.gov/site-information/conditions-of-use/">
+                                Conditions of
+                                Use
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="https://www.ctc.ca.gov/site-information/privacy-policy/">Privacy Policy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://www.ctc.ca.gov/site-information/site-map/">Site Map</a>
+                        </li>
+                    </ul>
+                    <ul class="nav social-share-links">
+                        <li class="nav-item">
+                            <a class="nav-link ca-gov-icon-facebook" href="https://www.facebook.com/CalCTC"
+                                   title="Commission&#039;s Facebook Profile" target="_blank">
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ca-gov-icon-linkedin" href="https://www.linkedin.com/company/cal-ctc"
+                                   title="Commission&#039;s LinkedIn Profile" target="_blank">
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ca-gov-icon-youtube" href="https://www.youtube.com/user/CalTeacherCommission"
+                                   title="Commission&#039;s YouTube Channel" target="_self">
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Copyright Statement -->
+            <div class="copyright">
+                <div class="container">
+                    <div class="d-flex">
+                        <p class="me-auto">
+                            Copyright <span aria-hidden="true">&copy;</span> 2026 State of California
+                        </p>
+                        
+
+
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="return-top">Back to top</button>
+        </footer>
+        <!-- Extra Decorative Content -->
+        <div class="decoration-last">&nbsp;</div>
+        <script type="text/javascript" src="/r4/asset/themes/CAST/js/oceanside.min.js" id="cagov-core-script-js"></script>
+        <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" id="google-translate-caweb-js"></script>
+        <script type="text/javascript" id="google-translate-caweb-js-after">
+            /* <![CDATA[ */
+            function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+            pageLanguage: "en", gaTrack: true, autoDisplay: false,
+            layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+            }, "google_translate_element");
+            }
+            /* ]]> */
+        </script>
+        <script type="text/javascript" src="/r4/asset/js/ctc-r4.js"></script>
+        <script type="text/javascript" src="/r4/asset/js/ctc-r4-cast.js"></script>
+        <script type="text/javascript" src="/r4/asset/js/clipboard.js"></script>
+        <script type="text/javascript" src="/r4/kendo/asset/js/ctc-r4-kendo-grid.js"></script>
+        <script type="text/javascript" src="/r4/asset/js/ctc-r4-init.js"></script>
+        
+		<script src="/js/site.js?v=qJ6sF6fAQn4m-8y39hiFs0CzFE8ldTJ8vZrFRoBAU5U"></script>
+	
+    </body>
+</html>

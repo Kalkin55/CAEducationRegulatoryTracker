@@ -39,11 +39,17 @@ class Fetcher:
 
     def get(self, url: str) -> httpx.Response:
         """GET with retries; the body is capped at MAX_BYTES."""
+        return self.request("GET", url)
+
+    def post(self, url: str, **kwargs) -> httpx.Response:
+        return self.request("POST", url, **kwargs)
+
+    def request(self, method: str, url: str, **kwargs) -> httpx.Response:
         last: Exception | None = None
         for attempt in range(self.retries):
             self._wait_for_host(url)
             try:
-                with self.client.stream("GET", url) as resp:
+                with self.client.stream(method, url, **kwargs) as resp:
                     if resp.status_code == 429 or resp.status_code >= 500:
                         raise FetchError(f"HTTP {resp.status_code} for {url}")
                     resp.raise_for_status()
@@ -52,8 +58,11 @@ class Fetcher:
                         body.extend(chunk)
                         if len(body) > MAX_BYTES:
                             raise FetchError(f"{url} is larger than {MAX_BYTES} bytes")
+                    # iter_bytes() already decompressed the body, so drop the encoding headers.
+                    headers = {k: v for k, v in resp.headers.items()
+                               if k.lower() not in ("content-encoding", "content-length")}
                     return httpx.Response(
-                        resp.status_code, headers=resp.headers, content=bytes(body),
+                        resp.status_code, headers=headers, content=bytes(body),
                         request=resp.request,
                     )
             except httpx.HTTPStatusError as e:

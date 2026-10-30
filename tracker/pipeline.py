@@ -1,0 +1,240 @@
+"""Scrape agencies, store what changed, and run keyword matching."""
+
+from __future__ import annotations
+
+import datetime as dt
+import hashlib
+import json
+import logging
+from dataclasses import dataclass, field
+
+import psycopg
+
+from tracker.agencies import AGENCIES, BY_ID
+from tracker.documents import FetchedDocument, fetch_document
+from tracker.http import Fetcher
+from tracker.models import Posting
+from tracker.scrapers import get_scraper
+
+log = logging.getLogger(__name__)
+
+# Keep re-downloading documents for meetings up to this many days in the past,
+# so revised agendas and late attachments are noticed.
+ACTIVE_WINDOW_DAYS = 14
+MAX_DOCS_PER_POSTING = 80
+# This many failed runs in a row flags an agency in the dashboard and emails an admin.
+FAILURE_ALERT_THRESHOLD = 3
+
+
+class EmptyResult(Exception):
+    pass
+
+
+@dataclass
+class AgencyResult:
+    agency_id: str
+    ok: bool
+    skipped: bool = False
+    error: str | None = None
+    new: list[int] = field(default_factory=list)
+    updated: list[int] = field(default_factory=list)
+    unchanged: int = 0
+    consecutive_failures: int = 0
+
+
+def sync_agencies(conn: psycopg.Connection) -> None:
+    from tracker.scrapers import SCRAPERS
+
+    for a in AGENCIES:
+        conn.execute(
+            """insert into agencies (id, name, short_name, url, scraper_ready)
+               values (%s, %s, %s, %s, %s)
+               on conflict (id) do update set name = excluded.name,
+                 short_name = excluded.short_name, url = excluded.url,
+                 scraper_ready = excluded.scraper_ready""",
+            (a.id, a.name, a.short_name, a.url, a.id in SCRAPERS),
+        )
+
+
+def run(conn: psycopg.Connection, fetcher: Fetcher, agency_ids: list[str] | None = None,
+        today: dt.date | None = None) -> list[AgencyResult]:
+    """Scrape the given agencies (default: all) and commit after each one."""
+    today = today or dt.date.today()
+    sync_agencies(conn)
+    conn.commit()
+    results = []
+    for agency_id in agency_ids or [a.id for a in AGENCIES]:
+        if agency_id not in BY_ID:
+            raise ValueError(f"unknown agency {agency_id!r}")
+        scraper = get_scraper(agency_id)
+        if scraper is None:
+            results.append(AgencyResult(agency_id, ok=False, skipped=True,
+                                        error="scraper not built yet"))
+            continue
+        results.append(run_agency(conn, fetcher, agency_id, scraper.fetch, today))
+    return results
+
+
+def run_agency(conn: psycopg.Connection, fetcher: Fetcher, agency_id: str,
+               scrape, today: dt.date) -> AgencyResult:
+    last_success, last_count = conn.execute(
+        "select last_success_at, last_posting_count from agencies where id = %s",
+        (agency_id,),
+    ).fetchone()
+    try:
+        postings = scrape(fetcher)
+        if not postings and last_count:
+            raise EmptyResult(
+                f"found no postings (previously {last_count}); the page layout may have changed")
+        result = AgencyResult(agency_id, ok=True)
+        first_run = last_success is None
+        seen_keys = set()
+        for p in postings:
+            if p.external_key in seen_keys:
+                continue  # some pages list the same meeting twice
+            seen_keys.add(p.external_key)
+            baseline = first_run and not (p.meeting_date and p.meeting_date >= today)
+            outcome, posting_id = store_posting(conn, fetcher, agency_id, p, today, baseline)
+            if outcome == "new" and not baseline:
+                result.new.append(posting_id)
+            elif outcome == "updated":
+                result.updated.append(posting_id)
+            else:
+                result.unchanged += 1
+        conn.execute(
+            """update agencies set last_checked_at = now(), last_success_at = now(),
+                 last_error = null, consecutive_failures = 0, last_posting_count = %s
+               where id = %s""",
+            (len(seen_keys), agency_id),
+        )
+        conn.commit()
+        log.info("%s: %d new, %d updated, %d unchanged", agency_id,
+                 len(result.new), len(result.updated), result.unchanged)
+        return result
+    except Exception as e:
+        conn.rollback()
+        log.exception("%s failed", agency_id)
+        (failures,) = conn.execute(
+            """update agencies set last_checked_at = now(), last_error = %s,
+                 consecutive_failures = consecutive_failures + 1
+               where id = %s returning consecutive_failures""",
+            (f"{type(e).__name__}: {e}"[:2000], agency_id),
+        ).fetchone()
+        conn.commit()
+        return AgencyResult(agency_id, ok=False, error=str(e), consecutive_failures=failures)
+
+
+def is_active(p: Posting, today: dt.date) -> bool:
+    if p.kind != "meeting":
+        return False  # opinions and initiatives are documents that don't get revised in place
+    return p.meeting_date is None or p.meeting_date >= today - dt.timedelta(days=ACTIVE_WINDOW_DAYS)
+
+
+def content_hash(p: Posting, doc_shas: dict[str, str | None]) -> str:
+    payload = {
+        "title": p.title,
+        "date": p.meeting_date.isoformat() if p.meeting_date else None,
+        "items": [[i.number, i.title, i.description] for i in p.items],
+        "docs": sorted([d.url, doc_shas.get(d.url) or "unfetched"] for d in p.documents),
+    }
+    return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
+
+
+def store_posting(conn: psycopg.Connection, fetcher: Fetcher, agency_id: str, p: Posting,
+                  today: dt.date, baseline: bool) -> tuple[str, int]:
+    """Insert or update one posting. Returns ('new' | 'updated' | 'unchanged', id)."""
+    row = conn.execute(
+        "select id, content_hash from postings where agency_id = %s and external_key = %s",
+        (agency_id, p.external_key),
+    ).fetchone()
+    posting_id, old_hash = row if row else (None, None)
+
+    stored: dict[str, tuple[str | None, str | None]] = {}
+    if posting_id is not None:
+        stored = {url: (sha, text) for url, sha, text in conn.execute(
+            "select url, sha256, text from documents where posting_id = %s", (posting_id,))}
+
+    p.documents = p.documents[:MAX_DOCS_PER_POSTING]
+    refresh = posting_id is None or is_active(p, today)
+    docs: dict[str, FetchedDocument] = {}
+    for d in p.documents:
+        if d.url in docs:
+            continue
+        prev_sha, prev_text = stored.get(d.url, (None, None))
+        if refresh or prev_sha is None:
+            got = fetch_document(fetcher, d.url)
+            if got.sha256 is None and prev_sha is not None:
+                got = FetchedDocument(prev_sha, prev_text, got.error)  # keep last good copy
+            elif got.sha256 == prev_sha and got.text is None:
+                got = FetchedDocument(prev_sha, prev_text, got.error)
+            docs[d.url] = got
+        else:
+            docs[d.url] = FetchedDocument(prev_sha, prev_text)
+
+    new_hash = content_hash(p, {u: f.sha256 for u, f in docs.items()})
+
+    if posting_id is not None and new_hash == old_hash:
+        conn.execute(
+            "update postings set last_seen_at = now(), url = %s where id = %s",
+            (p.url, posting_id),
+        )
+        if refresh:
+            for url, got in docs.items():
+                conn.execute(
+                    """update documents set fetch_error = %s,
+                         fetched_at = case when %s::text is null then now() else fetched_at end
+                       where posting_id = %s and url = %s""",
+                    (got.error, got.error, posting_id, url),
+                )
+        return "unchanged", posting_id
+
+    if posting_id is None:
+        (posting_id,) = conn.execute(
+            """insert into postings (agency_id, kind, external_key, title, meeting_date, url,
+                 content_hash, is_baseline)
+               values (%s, %s, %s, %s, %s, %s, %s, %s) returning id""",
+            (agency_id, p.kind, p.external_key, p.title, p.meeting_date, p.url,
+             new_hash, baseline),
+        ).fetchone()
+        outcome = "new"
+    else:
+        conn.execute(
+            """update postings set kind = %s, title = %s, meeting_date = %s, url = %s,
+                 content_hash = %s, last_changed_at = clock_timestamp(), last_seen_at = now()
+               where id = %s""",
+            (p.kind, p.title, p.meeting_date, p.url, new_hash, posting_id),
+        )
+        conn.execute("delete from items where posting_id = %s", (posting_id,))
+        outcome = "updated"
+
+    for pos, item in enumerate(p.items):
+        conn.execute(
+            """insert into items (posting_id, position, number, title, description)
+               values (%s, %s, %s, %s, %s)""",
+            (posting_id, pos, item.number, item.title, item.description),
+        )
+
+    conn.execute(
+        "delete from documents where posting_id = %s and not (url = any(%s))",
+        (posting_id, list(docs)),
+    )
+    labels = {d.url: d for d in reversed(p.documents)}  # first occurrence wins
+    for url, got in docs.items():
+        link = labels[url]
+        conn.execute(
+            """insert into documents (posting_id, item_position, url, label, sha256, text,
+                 fetched_at, fetch_error)
+               values (%s, %s, %s, %s, %s, %s, now(), %s)
+               on conflict (posting_id, url) do update set item_position = excluded.item_position,
+                 label = excluded.label, sha256 = excluded.sha256, text = excluded.text,
+                 fetched_at = excluded.fetched_at, fetch_error = excluded.fetch_error""",
+            (posting_id, link.item_index, url, link.label, got.sha256, got.text, got.error),
+        )
+
+    if not baseline:
+        conn.execute(
+            "insert into posting_events (posting_id, kind, content_hash) values (%s, %s, %s)",
+            (posting_id, outcome, new_hash),
+        )
+    conn.execute("select rematch(%s, null)", ([posting_id],))
+    return outcome, posting_id

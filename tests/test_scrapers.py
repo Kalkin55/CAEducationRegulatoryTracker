@@ -109,3 +109,34 @@ def test_fppc_listing_and_agenda():
     assert items[2].description.startswith("Staff: Neal Bucknell")
     assert len(docs) == 28
     assert (docs[1].label, docs[1].item_index) == ("Gatto and Meister - Stipulation", 2)
+
+
+def test_calpers_listing_and_committee_page():
+    from tracker.scrapers.calpers import CalPERS
+
+    urls = CalPERS().parse_listing((FIX / "calpers/board-meetings.html").read_bytes())
+    # Only the two latest months, not the years of archived meetings the page links.
+    assert {u[-6:] for u in urls} == {"202609", "202607"}
+    url = "https://www.calpers.ca.gov/about/board/board-meetings/pension-202609"
+    p = CalPERS().parse_meeting((FIX / "calpers/pension-202609.html").read_bytes(), url)
+    assert (p.external_key, p.meeting_date) == ("pension-202609", dt.date(2026, 9, 15))
+    numbers = [i.number for i in p.items]
+    assert numbers[:2] == ["1", "1"] and numbers[7:9] == ["2", "3"]  # open session resumes at 2
+    # Item numbers line up with CalPERS' own document names.
+    for d in p.documents:
+        assert f"-item-{p.items[d.item_index].number}-" in d.url
+    assert len(p.documents) == 12
+
+
+def test_calstrs_listing_and_meeting():
+    from tracker.scrapers.calstrs import CalSTRS
+
+    listing = CalSTRS().parse_listing((FIX / "calstrs/board-meetings.html").read_bytes())
+    assert listing[0] == ("https://www.calstrs.com/2026-11-03-board-meeting-november-2026", dt.date(2026, 11, 3))
+    assert len(listing) == 6
+    title, items, docs = CalSTRS().parse_meeting((FIX / "calstrs/2026-11-03.html").read_bytes(), listing[0][0])
+    assert len(items) == 71 and len(docs) == 101
+    assert items[2].title.startswith("Consideration of Proposed Administrative Decision")
+    assert items[2].description.startswith("Appeals Committee - 2:30 p.m. (Nov 3) · Session: Open")
+    assert items[-1].description.startswith("Regular Meeting - 10:45 a.m. (Nov 5)")
+    assert (docs[0].label, docs[0].item_index) == ("Item 01", 0)

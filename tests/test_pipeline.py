@@ -70,7 +70,8 @@ def test_unchanged_rerun_creates_no_event(conn, fetcher):
     assert conn.execute("select count(*) from posting_events").fetchone()[0] == 1
 
 
-def test_review_then_revised_document_shows_updated(conn, fetcher):
+def test_review_then_revised_document_shows_updated(conn, fetcher, monkeypatch):
+    monkeypatch.setattr(pipeline, "DOC_RECHECK_HOURS", 0)
     mark_succeeded_before(conn)
     fetcher.pages[REPORT_URL] = ("report v1", "text/plain")
     pid = run_once(conn, fetcher, [nov_meeting()]).new[0]
@@ -114,7 +115,8 @@ def test_first_run_baselines_past_meetings_but_not_upcoming(conn, fetcher):
     assert conn.execute("select count(*) from posting_events").fetchone()[0] == 1
 
 
-def test_document_fetch_failure_keeps_last_good_copy(conn, fetcher):
+def test_document_fetch_failure_keeps_last_good_copy(conn, fetcher, monkeypatch):
+    monkeypatch.setattr(pipeline, "DOC_RECHECK_HOURS", 0)
     mark_succeeded_before(conn)
     fetcher.pages[REPORT_URL] = ("charter report", "text/plain")
     pid = run_once(conn, fetcher, [nov_meeting()]).new[0]
@@ -124,6 +126,24 @@ def test_document_fetch_failure_keeps_last_good_copy(conn, fetcher):
     text, err = conn.execute("select text, fetch_error from documents where posting_id = %s",
                              (pid,)).fetchone()
     assert text == "charter report" and "404" in err
+
+
+def test_recent_documents_are_not_rechecked_every_run(conn, fetcher):
+    mark_succeeded_before(conn)
+    fetcher.pages[REPORT_URL] = ("v1", "text/plain")
+    other = "https://www.cde.ca.gov/be/ag/ag/item06.pdf"
+    run_once(conn, fetcher, [nov_meeting()])
+    fetcher.requests.clear()
+    fetcher.pages[other] = ("item six", "text/plain")
+    p = nov_meeting()
+    p.documents.append(DocLink(other, "Item 6"))
+    r = run_once(conn, fetcher, [p])
+    assert fetcher.requests == [other]  # only the new link is downloaded
+    assert len(r.updated) == 1
+    conn.execute("update documents set fetched_at = now() - interval '13 hours'")
+    fetcher.requests.clear()
+    run_once(conn, fetcher, [p])
+    assert sorted(fetcher.requests) == sorted([REPORT_URL, other])
 
 
 def test_old_meetings_do_not_redownload_documents(conn, fetcher):

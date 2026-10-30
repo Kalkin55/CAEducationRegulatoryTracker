@@ -21,7 +21,11 @@ log = logging.getLogger(__name__)
 # Keep re-downloading documents for meetings up to this many days in the past,
 # so revised agendas and late attachments are noticed.
 ACTIVE_WINDOW_DAYS = 14
-MAX_DOCS_PER_POSTING = 80
+MAX_DOCS_PER_POSTING = 200
+# Already-downloaded documents are re-checked at most this often. New links are
+# always fetched right away; this just avoids re-downloading every PDF of a
+# large meeting (CalSTRS posts 100+) on each run.
+DOC_RECHECK_HOURS = 12
 # This many failed runs in a row flags an agency in the dashboard and emails an admin.
 FAILURE_ALERT_THRESHOLD = 3
 
@@ -153,9 +157,16 @@ def store_posting(conn: psycopg.Connection, fetcher: Fetcher, agency_id: str, p:
     posting_id, old_hash = row if row else (None, None)
 
     stored: dict[str, tuple[str | None, str | None]] = {}
+    recent: set[str] = set()  # checked within DOC_RECHECK_HOURS
     if posting_id is not None:
-        stored = {url: (sha, text) for url, sha, text in conn.execute(
-            "select url, sha256, text from documents where posting_id = %s", (posting_id,))}
+        for url, sha, text, fresh in conn.execute(
+                """select url, sha256, text,
+                          fetched_at > now() - make_interval(hours => %s)
+                   from documents where posting_id = %s""",
+                (DOC_RECHECK_HOURS, posting_id)):
+            stored[url] = (sha, text)
+            if fresh and sha is not None:
+                recent.add(url)
 
     p.documents = p.documents[:MAX_DOCS_PER_POSTING]
     refresh = posting_id is None or is_active(p, today)
@@ -164,7 +175,7 @@ def store_posting(conn: psycopg.Connection, fetcher: Fetcher, agency_id: str, p:
         if d.url in docs:
             continue
         prev_sha, prev_text = stored.get(d.url, (None, None))
-        if refresh or prev_sha is None:
+        if prev_sha is None or (refresh and d.url not in recent):
             got = fetch_document(fetcher, d.url)
             if got.sha256 is None and prev_sha is not None:
                 got = FetchedDocument(prev_sha, prev_text, got.error)  # keep last good copy

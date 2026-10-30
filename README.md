@@ -26,7 +26,7 @@ GitHub Actions (every 2h) ──► Python scrapers ──► Supabase Postgres 
 | State Board of Education | Yes, rate-limited | cde.ca.gov challenges automated clients; see below |
 | Advisory Commission on Charter Schools | Yes, rate-limited | Same site as SBE |
 | California Practitioners Advisory Group | Not yet | Same site; page couldn't be fetched to build against |
-| FCC Open Commission Meetings | Not yet | fcc.gov denies automated requests; planned via the Federal Register API |
+| FCC Open Commission Meetings | Yes | Via the Federal Register API (fcc.gov denies automated requests); the notice PDF is searched |
 | Educational Audit Appeals Panel | Not yet | Behind Cloudflare with no public feed: check by hand |
 
 Agencies that aren't automated show in the dashboard as "Not automated yet: check by hand".

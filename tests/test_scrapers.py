@@ -190,3 +190,16 @@ def test_ccee_meetings_from_wordpress_api():
         dt.date(2026, 8, 13), dt.date(2026, 6, 18), dt.date(2026, 2, 26), dt.date(2025, 12, 18)]
     assert postings[0].title.startswith("CCEE Governing Board Meeting - August 13, 2026")
     assert [d.label for d in postings[0].documents] == ["Agenda", "Public Correspondence"]
+
+
+def test_fcc_open_meetings_from_federal_register():
+    from tracker.scrapers.fcc import FCC
+
+    postings = FCC().parse(json.loads((FIX / "fcc/documents.json").read_text()))
+    assert len(postings) == 3
+    p = postings[0]
+    assert p.external_key == "2026-22080"
+    assert p.title == "FCC Open Commission Meeting Thursday, October 29, 2026"
+    assert p.meeting_date == dt.date(2026, 10, 29)
+    assert p.items[0].title.startswith("The Commission will consider a Further Notice")
+    assert p.documents[0].url == "https://www.govinfo.gov/content/pkg/FR-2026-10-29/pdf/2026-22080.pdf"

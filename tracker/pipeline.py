@@ -137,6 +137,20 @@ def is_active(p: Posting, today: dt.date) -> bool:
     return p.meeting_date is None or p.meeting_date >= today - dt.timedelta(days=ACTIVE_WINDOW_DAYS)
 
 
+def _strip_nul(s: str | None) -> str | None:
+    # Postgres text can't hold NUL characters; some PDFs' extracted text contains them.
+    return s.replace("\x00", "") if s else s
+
+
+def _strip_nul_posting(p: Posting) -> None:
+    p.title = _strip_nul(p.title)
+    for i in p.items:
+        i.number, i.title, i.description = (_strip_nul(i.number), _strip_nul(i.title),
+                                            _strip_nul(i.description))
+    for d in p.documents:
+        d.label = _strip_nul(d.label)
+
+
 def content_hash(p: Posting) -> str:
     payload = {
         "title": p.title,
@@ -150,6 +164,7 @@ def content_hash(p: Posting) -> str:
 def store_posting(conn: psycopg.Connection, fetcher: Fetcher, agency_id: str, p: Posting,
                   today: dt.date, baseline: bool) -> tuple[str, int]:
     """Insert or update one posting. Returns ('new' | 'updated' | 'unchanged', id)."""
+    _strip_nul_posting(p)
     row = conn.execute(
         "select id, content_hash from postings where agency_id = %s and external_key = %s",
         (agency_id, p.external_key),
@@ -185,6 +200,7 @@ def store_posting(conn: psycopg.Connection, fetcher: Fetcher, agency_id: str, p:
             docs[d.url] = FetchedDocument(None, None, "file too large to download for searching")
         elif prev_sha is None or (refresh and d.url not in recent):
             got = fetch_document(fetcher, d.url)
+            got.text = _strip_nul(got.text)
             fetched.add(d.url)
             if got.sha256 is None and prev_sha is not None:
                 got = FetchedDocument(prev_sha, prev_text, got.error)  # keep last good copy

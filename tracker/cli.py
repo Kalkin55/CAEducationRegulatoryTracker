@@ -45,7 +45,9 @@ def cmd_run(args) -> int:
             return preview(fetcher, args.agency)
         with connect() as conn:
             db = _NoCommit(conn) if args.dry_run else conn
-            results = pipeline.run(db, fetcher, args.agency or None)
+            skip = {a.strip() for a in args.exclude.split(",") if a.strip()}
+            selected = [a for a in (args.agency or [x.id for x in AGENCIES]) if a not in skip]
+            results = pipeline.run(db, fetcher, selected)
             for r in results:
                 status = "skipped" if r.skipped else ("ok" if r.ok else "FAILED")
                 print(f"{r.agency_id:15} {status:8} new={len(r.new)} updated={len(r.updated)} "
@@ -140,12 +142,16 @@ def cmd_sync(args) -> int:
 def main(argv: list[str] | None = None) -> int:
     logging.basicConfig(level=os.environ.get("LOG_LEVEL", "INFO"),
                         format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+    logging.getLogger("pdfminer").setLevel(logging.ERROR)  # noisy font warnings
+    logging.getLogger("httpx").setLevel(logging.WARNING)
     ap = argparse.ArgumentParser(prog="tracker")
     sub = ap.add_subparsers(dest="cmd", required=True)
 
     r = sub.add_parser("run", help="scrape agencies and store changes")
     r.add_argument("--agency", action="append", default=[], choices=[a.id for a in AGENCIES],
                    help="limit to one agency (repeatable)")
+    r.add_argument("--exclude", default="",
+                   help="comma-separated agency ids to skip (e.g. ones checked from another machine)")
     r.add_argument("--dry-run", action="store_true",
                    help="run against the database but roll everything back")
     r.add_argument("--no-db", action="store_true",

@@ -217,3 +217,14 @@ def test_late_document_without_new_hits_is_not_a_change(conn, fetcher):
     assert r.unchanged == 1 and not r.updated
     text, = conn.execute("select text from documents where posting_id = %s", (pid,)).fetchone()
     assert text == "Routine minutes."  # stored and searchable all the same
+
+
+def test_nul_characters_in_text_are_dropped(conn, fetcher):
+    mark_succeeded_before(conn)
+    fetcher.pages[REPORT_URL] = ("charter\x00 report", "text/plain")
+    p = nov_meeting()
+    p.items[0].title = "Approval\x00 of minutes"
+    pid = run_once(conn, fetcher, [p]).new[0]
+    assert conn.execute("select text from documents where posting_id = %s", (pid,)).fetchone()[0] == "charter report"
+    assert conn.execute("select title from items where posting_id = %s and position = 0",
+                        (pid,)).fetchone()[0] == "Approval of minutes"

@@ -50,6 +50,10 @@ def cmd_run(args) -> int:
         if args.no_db:
             return preview(fetcher, selected)
         with connect() as conn:
+            from tracker.migrate import migrate
+
+            for name in migrate(conn):
+                print(f"applied database migration {name}")
             db = _NoCommit(conn) if args.dry_run else conn
             results = pipeline.run(db, fetcher, selected)
             for r in results:
@@ -61,7 +65,7 @@ def cmd_run(args) -> int:
                 conn.rollback()
                 print("\n(dry run: nothing was saved)")
                 return 0
-            write_step_summary(results)
+            write_step_summary(results, conn)
             annotate_failures(results)
             notify.send_health_alerts(results)
             if not args.no_email:
@@ -72,20 +76,33 @@ def cmd_run(args) -> int:
         fetcher.close()
 
 
-def write_step_summary(results) -> None:
+def write_step_summary(results, conn=None) -> None:
     """On GitHub Actions, show a per-agency table on the run's page."""
     path = os.environ.get("GITHUB_STEP_SUMMARY")
     if not path:
         return
+    from tracker import paced
     from tracker.agencies import BY_ID
 
-    lines = ["| Agency | Result | New | Updated | Unchanged | First run (already posted) |",
-             "|---|---|---|---|---|---|"]
+    lines = ["| Agency | Result | New | Updated | Unchanged | First run (already posted) | Notes |",
+             "|---|---|---|---|---|---|---|"]
     for r in results:
-        result = ("Not automated yet" if r.skipped else "OK" if r.ok
-                  else f"Failed: {(r.error or '').replace('|', '/')[:150]}")
+        if r.skipped and r.note:
+            result = "Skipped this run"
+        elif r.skipped:
+            result = "Not automated yet"
+        elif r.ok:
+            result = "OK"
+        else:
+            result = f"Failed: {(r.error or '').replace('|', '/')[:150]}"
         lines.append(f"| {BY_ID[r.agency_id].name} | {result} | {len(r.new)} | {len(r.updated)} "
-                     f"| {r.unchanged} | {r.baseline} |")
+                     f"| {r.unchanged} | {r.baseline} | {(r.note or '').replace('|', '/')} |")
+    if conn is not None and any(r.agency_id in paced.CDE_AGENCIES for r in results):
+        stats = paced.acceptance_by_gap(conn)
+        if stats:
+            lines += ["", "**cde.ca.gov requests, last 14 days, by time since the previous request**", "",
+                      "| Spacing | Accepted | Challenged |", "|---|---|---|"]
+            lines += [f"| {label} | {ok} | {bad} |" for label, ok, bad in stats]
     with open(path, "a", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
 
@@ -102,7 +119,13 @@ def annotate_failures(results) -> None:
 
 
 def preview(fetcher: Fetcher, agency_ids: list[str]) -> int:
+    from tracker.paced import CDE_AGENCIES
+
     for agency_id in agency_ids or [a.id for a in AGENCIES]:
+        if agency_id in CDE_AGENCIES:
+            print(f"== {agency_id}: skipped in preview (cde.ca.gov is read one page per run; "
+                  "use 'run --dry-run' to try one request)")
+            continue
         scraper = get_scraper(agency_id)
         if not scraper:
             print(f"== {agency_id}: scraper not built yet")

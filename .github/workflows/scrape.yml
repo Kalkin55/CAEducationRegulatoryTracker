@@ -12,22 +12,26 @@ on:
         description: "Only this agency id (e.g. sbe). Leave blank for all."
         required: false
 
-# Some agency sites (cde.ca.gov, dgs.ca.gov, ccee-ca.org) refuse requests from
-# cloud data centers such as GitHub's. Those agencies can be checked from an
-# office computer running a self-hosted GitHub runner: set the repository
-# variable USE_OFFICE_RUNNER to "true" once the runner is installed. Until
-# then GitHub's servers try every agency, and the blocked ones show as failing.
+# cde.ca.gov (SBE, ACCS) challenges requests from cloud data centers such as
+# GitHub's, so those agencies can be checked from an office computer running a
+# self-hosted GitHub runner: set the repository variable USE_OFFICE_RUNNER to
+# "true" once the runner is installed. CDE is read one page per run; see
+# tracker/paced.py for the CDE_* pacing variables.
 env:
-  OFFICE_AGENCIES: ${{ vars.OFFICE_AGENCIES || 'sbe,accs,cpag,opsc,ccee' }}
-
-concurrency:
-  group: scrape
-  cancel-in-progress: false
+  OFFICE_AGENCIES: ${{ vars.OFFICE_AGENCIES || 'sbe,accs' }}
+  CDE_MIN_GAP_MINUTES: ${{ vars.CDE_MIN_GAP_MINUTES }}
+  CDE_PAGES_PER_RUN: ${{ vars.CDE_PAGES_PER_RUN }}
+  CDE_PAGE_GAP_SECONDS: ${{ vars.CDE_PAGE_GAP_SECONDS }}
 
 jobs:
   cloud:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    # Separate queues per job, so an office computer that's switched off
+    # never holds up the cloud checks.
+    concurrency:
+      group: scrape-cloud
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -51,6 +55,9 @@ jobs:
     if: vars.USE_OFFICE_RUNNER == 'true'
     runs-on: self-hosted
     timeout-minutes: 60
+    concurrency:
+      group: scrape-office
+      cancel-in-progress: false
     # Uses the Python installed on the office computer (3.12 or newer, installed
     # for all users and added to PATH). actions/setup-python is unreliable on
     # self-hosted Windows runners.

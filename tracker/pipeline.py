@@ -45,6 +45,7 @@ class AgencyResult:
     unchanged: int = 0
     baseline: int = 0  # first run: past meetings loaded as already posted
     consecutive_failures: int = 0
+    note: str | None = None  # shown in the run summary (e.g. paced crawling status)
 
 
 def sync_agencies(conn: psycopg.Connection) -> None:
@@ -68,9 +69,18 @@ def run(conn: psycopg.Connection, fetcher: Fetcher, agency_ids: list[str] | None
     sync_agencies(conn)
     conn.commit()
     results = []
-    for agency_id in agency_ids or [a.id for a in AGENCIES]:
+    selected = agency_ids or [a.id for a in AGENCIES]
+    for agency_id in selected:
         if agency_id not in BY_ID:
             raise ValueError(f"unknown agency {agency_id!r}")
+    from tracker import paced
+
+    paced_ids = [a for a in selected if a in paced.CDE_AGENCIES]
+    if paced_ids:
+        results.extend(paced.run_cde(conn, fetcher, paced_ids, today=today))
+    for agency_id in selected:
+        if agency_id in paced.CDE_AGENCIES:
+            continue
         scraper = get_scraper(agency_id)
         if scraper is None:
             results.append(AgencyResult(agency_id, ok=False, skipped=True,
@@ -162,7 +172,8 @@ def content_hash(p: Posting) -> str:
 
 
 def store_posting(conn: psycopg.Connection, fetcher: Fetcher, agency_id: str, p: Posting,
-                  today: dt.date, baseline: bool) -> tuple[str, int]:
+                  today: dt.date, baseline: bool, fetch_docs: bool = True,
+                  skipped_doc_note: str | None = None) -> tuple[str, int]:
     """Insert or update one posting. Returns ('new' | 'updated' | 'unchanged', id)."""
     _strip_nul_posting(p)
     row = conn.execute(
@@ -198,6 +209,8 @@ def store_posting(conn: psycopg.Connection, fetcher: Fetcher, agency_id: str, p:
         prev_sha, prev_text = stored.get(d.url, (None, None))
         if d.url in too_large:
             docs[d.url] = FetchedDocument(None, None, "file too large to download for searching")
+        elif not fetch_docs:
+            docs[d.url] = FetchedDocument(prev_sha, prev_text, None if prev_sha else skipped_doc_note)
         elif prev_sha is None or (refresh and d.url not in recent):
             got = fetch_document(fetcher, d.url)
             got.text = _strip_nul(got.text)

@@ -23,21 +23,26 @@ GitHub Actions (every 2h) ──► Python scrapers ──► Supabase Postgres 
 | CalPERS | Yes | Committee agenda pages for the two latest months |
 | CalSTRS | Yes | All committees of each board meeting |
 | CCEE | Yes | Via the site's public WordPress API (the HTML page is behind Cloudflare) |
-| State Board of Education | Yes, rate-limited | cde.ca.gov challenges automated clients; see below |
-| Advisory Commission on Charter Schools | Yes, rate-limited | Same site as SBE |
+| State Board of Education | Yes, paced | One page per run from an office computer; see below |
+| Advisory Commission on Charter Schools | Yes, paced | Same site as SBE |
 | California Practitioners Advisory Group | Not yet | Same site; page couldn't be fetched to build against |
 | FCC Open Commission Meetings | Yes | Via the Federal Register API (fcc.gov denies automated requests); the notice PDF is searched |
 | Educational Audit Appeals Panel | Not yet | Behind Cloudflare with no public feed: check by hand |
 
 Agencies that aren't automated show in the dashboard as "Not automated yet: check by hand".
 
-**cde.ca.gov:** the site uses bot protection (Radware) that challenges automated
-requests. The tracker spaces requests to it 8 seconds apart, makes at most 20
-per run, and stops for the run as soon as it is challenged. Agenda pages list
-every item's subject, so keyword hits on titles show up right away; item
-documents are downloaded a few per run. If GitHub's servers are challenged
-consistently, the dashboard flags SBE/ACCS as failing. In that case, running
-the scraper from an office computer (a self-hosted GitHub runner) usually works.
+**cde.ca.gov (SBE, ACCS):** the site's bot protection (Radware) lets an
+occasional request through but challenges several in a row, and challenges
+GitHub's servers outright. So SBE and ACCS are checked from an office computer
+(a self-hosted GitHub runner; set the repository variable `USE_OFFICE_RUNNER`
+to `true`), one page per run: meeting lists first, then new agenda pages, then
+re-checks of upcoming agendas. Agenda pages include each item's subject, which
+keyword matching uses; item documents aren't downloaded. Each request is
+logged (`crawl_log`), and every run's summary shows how often CDE accepted
+requests at different spacings. Pacing is adjustable with repository
+variables: `CDE_MIN_GAP_MINUTES` (default 100), `CDE_PAGES_PER_RUN` (default 1)
+and `CDE_PAGE_GAP_SECONDS` (default 90). A challenge pauses CDE checks for 2
+hours, doubling with each further challenge up to 24 hours.
 
 ## How it behaves
 

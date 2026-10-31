@@ -92,7 +92,7 @@ def test_challenge_backs_off_and_doubles(conn, cde_fetcher):
 
     cde_fetcher.get = blocked
     r = run(conn, cde_fetcher, clock)["sbe"]
-    assert not r.ok and "backing off 2:00:00" in r.error
+    assert not r.ok and r.backing_off and "backing off 2:00:00" in r.error
     clock.advance(hours=1)
     assert run(conn, cde_fetcher, clock)["sbe"].skipped  # still backing off
     clock.advance(hours=1, minutes=1)

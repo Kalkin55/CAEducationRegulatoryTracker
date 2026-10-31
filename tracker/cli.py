@@ -70,7 +70,7 @@ def cmd_run(args) -> int:
             notify.send_health_alerts(results)
             if not args.no_email:
                 notify.send_user_alerts(conn, "immediate")
-        failed = [r for r in results if not r.ok and not r.skipped]
+        failed = [r for r in results if not r.ok and not r.skipped and not r.backing_off]
         return 1 if failed and len(failed) == len([r for r in results if not r.skipped]) else 0
     finally:
         fetcher.close()
@@ -115,7 +115,8 @@ def annotate_failures(results) -> None:
     for r in results:
         if not r.ok and not r.skipped:
             msg = (r.error or "unknown error").replace("\r", " ").replace("\n", " ")[:500]
-            print(f"::error title={r.agency_id} failed::{msg}", flush=True)
+            level = "warning" if r.backing_off else "error"
+            print(f"::{level} title={r.agency_id} {'backing off' if r.backing_off else 'failed'}::{msg}", flush=True)
 
 
 def preview(fetcher: Fetcher, agency_ids: list[str]) -> int:

@@ -46,6 +46,9 @@ class AgencyResult:
     baseline: int = 0  # first run: past meetings loaded as already posted
     consecutive_failures: int = 0
     note: str | None = None  # shown in the run summary (e.g. paced crawling status)
+    # Failed, but in an expected, self-handling way (CDE challenged a paced
+    # request and checks are backing off). Doesn't fail the GitHub job.
+    backing_off: bool = False
 
 
 def sync_agencies(conn: psycopg.Connection) -> None:

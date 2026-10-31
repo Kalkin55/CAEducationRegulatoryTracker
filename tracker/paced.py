@@ -186,7 +186,7 @@ def run_cde(conn: psycopg.Connection, fetcher: Fetcher, agency_ids: list[str],
             failures = _mark_failure(conn, task.agency_id, f"CDE challenged the request; retrying after {backoff}")
             results[task.agency_id] = AgencyResult(
                 task.agency_id, ok=False, error=f"challenged by CDE bot protection ({_gap_text(gap)}); backing off {backoff}",
-                consecutive_failures=failures)
+                consecutive_failures=failures, backing_off=True)
             break
         except FetchError as e:
             _log_request(conn, task.url, t, "error", str(e)[:500])

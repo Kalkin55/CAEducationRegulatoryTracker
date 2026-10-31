@@ -48,6 +48,16 @@ def parse_long_date(s: str, today: dt.date | None = None) -> dt.date | None:
     return min(candidates, key=lambda d: abs((d - today).days))
 
 
+def long_date(d: dt.date) -> str:
+    """'October 6, 2026'. (strftime has no portable no-padding day code; Windows lacks it.)"""
+    return f"{d:%B} {d.day}, {d.year}"
+
+
+def short_date(d: dt.date) -> str:
+    """'Nov 3'."""
+    return f"{d:%b} {d.day}"
+
+
 def is_document(href: str) -> bool:
     path = href.lower().split("?", 1)[0]
     return path.endswith((".pdf", ".doc", ".docx", ".pptx", ".xlsx"))

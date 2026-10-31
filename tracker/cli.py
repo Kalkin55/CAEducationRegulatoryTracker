@@ -41,12 +41,16 @@ class _NoCommit:
 def cmd_run(args) -> int:
     fetcher = Fetcher()
     try:
+        skip = {a.strip() for a in args.exclude.split(",") if a.strip()}
+        wanted = args.agency + [a.strip() for a in args.agencies.split(",") if a.strip()]
+        unknown = [a for a in wanted + list(skip) if a not in {x.id for x in AGENCIES}]
+        if unknown:
+            sys.exit(f"unknown agency id(s): {', '.join(unknown)}")
+        selected = [a for a in (wanted or [x.id for x in AGENCIES]) if a not in skip]
         if args.no_db:
-            return preview(fetcher, args.agency)
+            return preview(fetcher, selected)
         with connect() as conn:
             db = _NoCommit(conn) if args.dry_run else conn
-            skip = {a.strip() for a in args.exclude.split(",") if a.strip()}
-            selected = [a for a in (args.agency or [x.id for x in AGENCIES]) if a not in skip]
             results = pipeline.run(db, fetcher, selected)
             for r in results:
                 status = "skipped" if r.skipped else ("ok" if r.ok else "FAILED")
@@ -81,7 +85,7 @@ def write_step_summary(results) -> None:
                   else f"Failed: {(r.error or '').replace('|', '/')[:150]}")
         lines.append(f"| {BY_ID[r.agency_id].name} | {result} | {len(r.new)} | {len(r.updated)} "
                      f"| {r.unchanged} | {r.baseline} |")
-    with open(path, "a") as f:
+    with open(path, "a", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
 
 
@@ -150,6 +154,8 @@ def main(argv: list[str] | None = None) -> int:
     r = sub.add_parser("run", help="scrape agencies and store changes")
     r.add_argument("--agency", action="append", default=[], choices=[a.id for a in AGENCIES],
                    help="limit to one agency (repeatable)")
+    r.add_argument("--agencies", default="",
+                   help="comma-separated agency ids to check (same as repeating --agency)")
     r.add_argument("--exclude", default="",
                    help="comma-separated agency ids to skip (e.g. ones checked from another machine)")
     r.add_argument("--dry-run", action="store_true",

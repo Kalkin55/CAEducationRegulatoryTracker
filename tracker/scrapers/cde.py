@@ -18,7 +18,7 @@ from tracker.http import Fetcher
 from tracker.models import DocLink, Item, Posting
 from tracker.scrapers import register
 from tracker.scrapers.base import Scraper
-from tracker.scrapers.common import clean, is_document, parse_long_date
+from tracker.scrapers.common import clean, is_document, long_date, parse_long_date
 
 BASE = "https://www.cde.ca.gov"
 RECENT = 2  # agenda pages read per run
@@ -129,6 +129,6 @@ class ACCS(_CDEAgency):
             text = clean(a.get_text(" "))
             date = parse_long_date(text)
             if m and date:
-                label = f"{date:%B %-d, %Y}" + (" (Canceled)" if "cancel" in text.lower() else "")
+                label = long_date(date) + (" (Canceled)" if "cancel" in text.lower() else "")
                 found[m[1]] = (m[1], Scraper.absolute(self.listing_url, a["href"]), label, date)
         return sorted(found.values(), key=lambda r: r[3], reverse=True)

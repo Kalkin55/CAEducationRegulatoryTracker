@@ -16,7 +16,7 @@ from tracker.http import Fetcher
 from tracker.models import DocLink, Posting
 from tracker.scrapers import register
 from tracker.scrapers.base import Scraper
-from tracker.scrapers.common import is_document, parse_long_date, text
+from tracker.scrapers.common import is_document, long_date, parse_long_date, text
 
 LISTING = "https://www.dgs.ca.gov/OPSC/Meetings"
 HEADING = re.compile(r"^(?P<title>.+?)\s*[-–]\s*(?P<when>(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),.+)$")
@@ -45,7 +45,7 @@ class OPSC(Scraper):
             date = parse_long_date(m["when"], today)
             docs = [DocLink(self.absolute(LISTING, a["href"]), text(a) or None)
                     for a in ul.find_all("a", href=True) if is_document(a["href"])]
-            title = f"{m['title']} - {date.strftime('%B %-d, %Y') if date else m['when']}"
+            title = f"{m['title']} - {long_date(date) if date else m['when']}"
             postings.append(Posting(
                 external_key=f"{date.isoformat() if date else m['when']}|{m['title'].lower()}",
                 title=title,

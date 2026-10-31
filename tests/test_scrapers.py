@@ -203,3 +203,10 @@ def test_fcc_open_meetings_from_federal_register():
     assert p.meeting_date == dt.date(2026, 10, 29)
     assert p.items[0].title.startswith("The Commission will consider a Further Notice")
     assert p.documents[0].url == "https://www.govinfo.gov/content/pkg/FR-2026-10-29/pdf/2026-22080.pdf"
+
+
+def test_no_platform_specific_date_formats():
+    # %-d works on Linux only; the office runner may be Windows.
+    root = Path(__file__).parent.parent / "tracker"
+    offenders = [str(p) for p in root.rglob("*.py") if "%-d" in p.read_text()]
+    assert offenders == []

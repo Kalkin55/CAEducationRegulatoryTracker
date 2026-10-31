@@ -51,14 +51,16 @@ jobs:
     if: vars.USE_OFFICE_RUNNER == 'true'
     runs-on: self-hosted
     timeout-minutes: 60
+    # Uses the Python installed on the office computer (3.12 or newer, installed
+    # for all users and added to PATH). actions/setup-python is unreliable on
+    # self-hosted Windows runners.
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - run: python -m pip install .
+      - name: Create Python environment
+        run: ${{ runner.os == 'Windows' && 'py -3' || 'python3' }} -m venv .venv
+      - name: Install
+        run: ${{ runner.os == 'Windows' && '.venv\Scripts\python.exe' || '.venv/bin/python' }} -m pip install --quiet --disable-pip-version-check .
       - name: Scrape and alert (agencies that block cloud servers)
-        shell: bash
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
@@ -66,7 +68,5 @@ jobs:
           ADMIN_EMAILS: ${{ secrets.ADMIN_EMAILS }}
           DASHBOARD_URL: ${{ vars.DASHBOARD_URL }}
           TRACKER_USER_AGENT: ${{ vars.TRACKER_USER_AGENT }}
-        run: |
-          args=""
-          for a in ${OFFICE_AGENCIES//,/ }; do args="$args --agency $a"; done
-          python -m tracker run $args
+          PYTHONIOENCODING: utf-8
+        run: ${{ runner.os == 'Windows' && '.venv\Scripts\python.exe' || '.venv/bin/python' }} -m tracker run --agencies "${{ env.OFFICE_AGENCIES }}"

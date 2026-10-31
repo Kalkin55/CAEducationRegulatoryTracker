@@ -12,7 +12,7 @@ from tracker.http import Fetcher
 from tracker.models import DocLink, Item, Posting
 from tracker.scrapers import register
 from tracker.scrapers.base import Scraper
-from tracker.scrapers.common import is_document, parse_long_date, text
+from tracker.scrapers.common import is_document, long_date, parse_long_date, short_date, text
 
 BASE = "https://www.calstrs.com"
 LISTING = f"{BASE}/board-meetings"
@@ -30,7 +30,7 @@ class CalSTRS(Scraper):
             title, items, docs = self.parse_meeting(fetcher.get(url).content, url)
             postings.append(Posting(
                 external_key=url.rsplit("/", 1)[-1],
-                title=f"{title} - {date:%B %-d, %Y}",
+                title=f"{title} - {long_date(date)}",
                 meeting_date=date,
                 url=url,
                 items=items,
@@ -73,7 +73,7 @@ class CalSTRS(Scraper):
                 if el.name == "h4":
                     m = re.match(r"Item\s+([\w.]+)\s*[-–]\s*(.+)", text(el))
                     number, item_title = (m[1], m[2]) if m else (None, text(el))
-                    prefix = committee + (f" ({when:%b %-d})" if when else "")
+                    prefix = committee + (f" ({short_date(when)})" if when else "")
                     items.append(Item(title=item_title, number=number, description=prefix))
                 elif el.name == "p" and items and el.find_previous("h4") is not None:
                     line = text(el)

@@ -37,3 +37,10 @@ def test_per_host_request_budget(monkeypatch):
     with pytest.raises(BudgetExceeded):
         f.get("https://www.cde.ca.gov/3")
     assert f.get("https://oag.ca.gov/x").text == "ok"  # other hosts unaffected
+
+
+def test_empty_user_agent_setting_falls_back_to_default(monkeypatch):
+    monkeypatch.setenv("TRACKER_USER_AGENT", "")
+    assert http.user_agent().startswith("CA-Education-Agency-Tracker/")
+    monkeypatch.setenv("TRACKER_USER_AGENT", "Our Org Tracker (ops@example.org)")
+    assert http.user_agent() == "Our Org Tracker (ops@example.org)"

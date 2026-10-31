@@ -8,10 +8,14 @@ from urllib.parse import urlsplit
 
 import httpx
 
-USER_AGENT = os.environ.get(
-    "TRACKER_USER_AGENT",
-    "CA-Education-Agency-Tracker/0.1 (agenda monitoring; contact via repository owner)",
-)
+# GitHub Actions passes an unset repository variable as an empty string, and a
+# blank User-Agent gets requests refused (HTTP 403), so treat empty as unset.
+def user_agent() -> str:
+    return (os.environ.get("TRACKER_USER_AGENT", "").strip()
+            or "CA-Education-Agency-Tracker/0.1 (agenda monitoring; contact via repository owner)")
+
+
+USER_AGENT = user_agent()
 MAX_BYTES = 40 * 1024 * 1024
 # Hosts that challenge fast clients get a slower pace (seconds between requests).
 HOST_INTERVALS = {"www.cde.ca.gov": 8.0}

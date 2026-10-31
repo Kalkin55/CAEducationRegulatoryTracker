@@ -62,6 +62,7 @@ def cmd_run(args) -> int:
                 print("\n(dry run: nothing was saved)")
                 return 0
             write_step_summary(results)
+            annotate_failures(results)
             notify.send_health_alerts(results)
             if not args.no_email:
                 notify.send_user_alerts(conn, "immediate")
@@ -87,6 +88,17 @@ def write_step_summary(results) -> None:
                      f"| {r.unchanged} | {r.baseline} |")
     with open(path, "a", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
+
+
+def annotate_failures(results) -> None:
+    """On GitHub Actions, surface each failed agency as an annotation on the run
+    page (readable without opening the logs)."""
+    if os.environ.get("GITHUB_ACTIONS") != "true":
+        return
+    for r in results:
+        if not r.ok and not r.skipped:
+            msg = (r.error or "unknown error").replace("\r", " ").replace("\n", " ")[:500]
+            print(f"::error title={r.agency_id} failed::{msg}", flush=True)
 
 
 def preview(fetcher: Fetcher, agency_ids: list[str]) -> int:
@@ -170,4 +182,13 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("sync-agencies", help="write the agency list to the database").set_defaults(func=cmd_sync)
 
     args = ap.parse_args(argv)
-    return args.func(args)
+    try:
+        return args.func(args)
+    except Exception as e:
+        if os.environ.get("GITHUB_ACTIONS") == "true":
+            import traceback
+            where = traceback.extract_tb(e.__traceback__)[-1]
+            print(f"::error title=tracker crashed::{type(e).__name__}: {e} "
+                  f"({where.filename.rsplit('/', 1)[-1].rsplit(chr(92), 1)[-1]}:{where.lineno})".replace("\n", " "),
+                  flush=True)
+        raise
